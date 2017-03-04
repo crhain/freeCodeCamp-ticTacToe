@@ -1,0 +1,27 @@
+h1{
+  color: blue;
+}
+
+.row{
+  clear: both;
+}
+
+#board button{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  outline: none;
+  border: none;
+  padding: 0;
+  background-color: blue;
+  color: white;
+  font-size: 1em;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  float: left;
+}
+
+#board button:activate{
+  width: 50px;
+  height: 50px;
+}
