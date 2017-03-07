@@ -18,4 +18,4 @@ You can get feedback on your project by sharing it with your friends on Facebook
 */
 
 console.log("Let's play some Tic Tac Toe!");
-board.start();
+game.start();
