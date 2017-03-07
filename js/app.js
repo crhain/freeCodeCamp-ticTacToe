@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /*
 
@@ -20,58 +20,4 @@ You can get feedback on your project by sharing it with your friends on Facebook
 */
 
 console.log("Let's play some Tic Tac Toe!");
-
-var game = function () {
-  var module = {};
-  //PRIVATE PROPERTIES
-  var board = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']];
-
-  //START GAME
-  initalizeBoard();
-
-  //PRIVATE METHODS
-  function initalizeBoard() {
-    var buttons = document.querySelectorAll('#board button');
-
-    //add click handler to buttons
-
-    for (var i = 0; i < buttons.length; i++) {
-      //buttons[i].textContent = ".";
-      buttons[i].addEventListener('click', function (e) {
-        console.log('button clicked!');
-        this.innerHTML = "X";
-        e.preventDefault();
-      });
-    }
-  }
-
-  //PUBLIC METHODS
-  function getBoard() {
-    return board;
-  }
-  function resetBoard() {
-    board = [['.', '.', '.'], ['.', '.', '.'], ['.', '.', '.']];
-    return true;
-  }
-
-  //SETUP MODULE
-  module.getBoard = getBoard;
-  module.resetBoard = resetBoard;
-
-  //EXPORT MODULE
-  return module;
-}();
-
-console.log(game.getBoard());
-
-function hello() {
-  var _console;
-
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  (_console = console).log.apply(_console, ["Hello"].concat(args));
-}
-
-hello('Carl', 'Bob');
+game.start();

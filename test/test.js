@@ -1,12 +1,13 @@
 var assert = chai.assert;
-var playerPiece = game.playerPiece;
-var computerPiece = game.computerPiece;
+//var playerPiece = game.playerPiece;
+//var computerPiece = game.computerPiece;
 
 //utility function for tests
 function setBoard(board){
-  for(let row = 0; row < game.board.length; row++){
-    for(let column = 0; column < game.board[row].length; column++){
-      game.board[row][column] = board[row][column];
+  var gameBoard = game.getBoard();
+  for(let row = 0; row < gameBoard.length; row++){
+    for(let column = 0; column < gameBoard[row].length; column++){
+      gameBoard[row][column] = board[row][column];
     }
   }
 }
@@ -18,43 +19,61 @@ describe('Array', function() {
     assert.equal(arr.length, 0);
   });
 });
-describe('METHOD: isWin', function() {
-  it('should not show a win condition', function(){
-    var currentMove = {row: 1, column:3, piece: 'X'};
-    var board = [
-      ["", "O", "X"],
-      ["", "X", ""],
-      ["", "", ""]
-    ];
 
-    setBoard(board);
-    assert.isNotOk(game.isWin(currentMove), 'game lost!');
+//Tests for game module
+describe('GAME MODULE:', function(){
+  describe('METHOD:', function(){
+    it('should...', function(){
+      assert.isOk(false);
+    });
+  });
+  describe('METHOD: isWin', function() {
+    it('should not show a win condition', function(){
+      var currentMove = {row: 1, column:3, piece: 'X'};
+      var board = [
+        ["", "O", "X"],
+        ["", "X", ""],
+        ["", "", ""]
+      ];
 
-  });
-  it('should show a win condition - row', function(){
-    //test win in row
-    var currentMove = {row: 1, column:3, piece: 'X'};
-    var board = [
-      ["X", "X", "X"],
-      ["", "O", ""],
-      ["O", "", ""]
-    ];
-    setBoard(board);
-    assert.isOk(game.isWin(currentMove), 'won by row!');
-  });
-  it('should show a win condition - column', function(){
-    //test win in row
-    var currentMove = {row: 1, column:3, piece: 'X'};
-    var board = [
-      ["", "", "X"],
-      ["", "O", "X"],
-      ["O", "", "X"]
-    ];
-    setBoard(board);
-    assert.isOk(game.isWin(currentMove), 'won by row!');
+      setBoard(board);
+      assert.isNotOk(game.isWin(currentMove), 'game lost!');
+
+    });
+    it('should show a win condition - row', function(){
+      //test win in row
+      var currentMove = {row: 1, column:3, piece: 'X'};
+      var board = [
+        ["X", "X", "X"],
+        ["", "O", ""],
+        ["O", "", ""]
+      ];
+      setBoard(board);
+      assert.isOk(game.isWin(currentMove), 'won by row!');
+    });
+    it('should show a win condition - column', function(){
+      //test win in row
+      var currentMove = {row: 1, column:3, piece: 'X'};
+      var board = [
+        ["", "", "X"],
+        ["", "O", "X"],
+        ["O", "", "X"]
+      ];
+      setBoard(board);
+      assert.isOk(game.isWin(currentMove), 'won by row!');
+    });
   });
 });
 
+describe('MESSAGE CLASS', function(){
+  describe('METHOD:', function(){
+    it('blah blah', function(){
+      assert.isOk(false);
+    });
+  });
+});
+
+/*
 describe('METHOD: moveHandler', function(){
   it('sets correct square:', function(){
     //some stubs to make this work
@@ -108,8 +127,8 @@ describe('METHOD: resetBoard', function(){
 
 
 //boilder plate
-/*describe('METHOD:', function(){
-  it(':', function(){
-
-  });
-});*/
+///describe('METHOD:', function(){
+//  it(':', function(){
+//  });
+//});
+*/
