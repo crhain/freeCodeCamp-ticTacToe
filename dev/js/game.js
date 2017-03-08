@@ -29,29 +29,36 @@ var game = (function(){
   function update(move){
     //if game is over, then short circuit update
     if(gameOver){
-      console.log('Game over!');
+      //console.log('Game over!');
+      //messageWindow.send('Game over!');
       return false;
     }
     //determine if move is valid. An invalid move will be passed as an empty move object
     if(!move.piece){
       console.log('Cannot move there!'); //update to send to message window
+      messageWindow.send('Cannot move there!');
       return false;
     }
     //update board model
     setBoardSquare(move)
+    //send move message-panel
+    messageWindow.send(move.piece + ": moves " + move.row + ", " + move.column);
     //test for win
     if(isWin(move)){
       if(playerTurn){
         console.log('You have WON!!!'); //update to send to message window
+        messageWindow.send('You have WON!!!');
       }
       else{
         console.log('You have LOST :(((('); //update to send to message window
+        messageWindow.send('You have LOST :((((');
       }
       gameOver = true;
       //resetGame();
     }
     else if(isTie()){
       console.log('You have tied :|'); //update to send to message window
+      messageWindow.send('You have tied :|');
       gameOver = true;
     }
     else{
@@ -69,6 +76,8 @@ var game = (function(){
     clearBoard();
     //reset board display
     boardDisplay.reset();
+    //reset message window
+    messageWindow.reset();
     //reset variables
     playerTurn = true;
     gameOver = false;

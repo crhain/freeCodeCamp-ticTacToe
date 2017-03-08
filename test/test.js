@@ -1,6 +1,11 @@
 var assert = chai.assert;
-//var playerPiece = game.playerPiece;
-//var computerPiece = game.computerPiece;
+
+//object to get ui elements on test html when needed
+var ui = {
+  resetButton: null,
+  messageWindow: document.getElementById('message-display'),
+};
+
 
 //utility function for tests
 function setBoard(board){
@@ -19,14 +24,8 @@ describe('Array', function() {
     assert.equal(arr.length, 0);
   });
 });
-
 //Tests for game module
 describe('GAME MODULE:', function(){
-  describe('METHOD:', function(){
-    it('should...', function(){
-      assert.isOk(false);
-    });
-  });
   describe('METHOD: isWin', function() {
     it('should not show a win condition', function(){
       var currentMove = {row: 1, column:3, piece: 'X'};
@@ -64,11 +63,69 @@ describe('GAME MODULE:', function(){
     });
   });
 });
-
+//MESSAGE CLASS TESTS
 describe('MESSAGE CLASS', function(){
-  describe('METHOD:', function(){
-    it('blah blah', function(){
-      assert.isOk(false);
+  describe('METHOD: send(message)', function(){
+    it('it updates outputBuffer with new message', function(){
+      var displayElement = ui.messageWindow;
+      var messageDisplay = new Message();
+      var message = "Hello World!";
+      messageDisplay.send(message);
+      assert.equal(displayElement.innerHTML, "<p>Hello World!</p>");
+    });
+  });
+
+  describe('METHOD: reset()', function(){
+    it('buffer is cleared after calling reset', function(){
+      var messageDisplay = new Message();
+      var message = "Hello World!";
+      var buffer = messageDisplay.outputBuffer;
+      messageDisplay.updateDisplay(message);
+      //console.log(messageDisplay.outputBuffer);
+      messageDisplay.reset();
+      console.log(messageDisplay);
+      //buffer.splice(0,1);
+      //console.log(messageDisplay.outputBuffer);
+      //console.log(buffer);
+      assert.equal(buffer.length, 0);
+    });
+  });
+  describe('METHOD: updateOutputBuffer', function(){
+    it('it updates outputBuffer with new message', function(){
+      var messageDisplay = new Message();
+      var message = "Hello World!";
+      messageDisplay.updateOutputBuffer(message);
+
+      assert.equal(messageDisplay.outputBuffer[messageDisplay.outputBuffer.length - 1], message);
+    });
+  });
+  describe('METHOD: updateDisplay(buffer)', function(){
+    it('returns contents of buffer as formated text:', function(){
+      var messageDisplay = new Message();
+      var displayWindow = ui.messageWindow;
+      messageDisplay.updateDisplay(["Hello World!"]);
+      assert.equal(displayWindow.innerHTML, "<p>Hello World!</p>");
+    });
+  });
+  describe('METHOD: getFormatedOutputText(buffer)', function(){
+    it('returns contents of buffer as formated text:', function(){
+      var messageDisplay = new Message();
+      var output = messageDisplay.getFormatedOutputText(["Hello World!", "This is Great!"])
+      assert.equal(output, "<p>This is Great!</p><p>Hello World!</p>");
+    });
+  });
+  describe('METHOD: getOutputBuffer()', function(){
+    it('returns outputBuffer:', function(){
+      var messageDisplay = new Message();
+      var buffer = messageDisplay.getOutputBuffer();
+      assert.equal(buffer, messageDisplay.outputBuffer);
+    });
+  });
+  describe('METHOD: getDisplayWindow()', function(){
+    it('returns outputBuffer:', function(){
+      var messageDisplay = new Message();
+      var display = messageDisplay.getDisplayWindow();
+      assert.equal(display, messageDisplay.display);
     });
   });
 });

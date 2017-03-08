@@ -41,8 +41,13 @@ button{
 }
 
 #message-panel{
-  height: 200px;
+  height: 300px;
   width: 300px;
   background-color: #E3E2E2;
   overflow: hidden;
+}
+#message-display{
+  width: 300px;
+  height: 100%;
+  padding: 0px 5px 10px 5px;
 }

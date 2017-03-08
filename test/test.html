@@ -5,17 +5,44 @@
     <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
   </head>
   <body>
+    <!-- need base html for testing; but set to hidden so it doesn't show up -->
+    <div hidden id="control-panel">
+      <button id="reset-btn">Reset</button>
+    </div>
+    <div hidden id='board'>
+      <div class="row">
+        <button id="1x1"></button>
+        <button id="2x1"></button>
+        <button id="3x1"></button>
+      </div>
+      <div class="row">
+        <button id="1x2"></button>
+        <button id="2x2"></button>
+        <button id="3x2"></button>
+      </div>
+      <div class="row">
+        <button id="1x3"></button>
+        <button id="2x3"></button>
+        <button id="3x3"></button>
+      </div>
+    </div>
+    <div hidden id="message-panel" class="row">
+      <h3>Messages</h3>
+      <div id="message-display"></div>
+    </div>
+    <!--div for mocha test output -->
     <div id="mocha"></div>
+    <!-- load in some scripts -->
     <script src="../node_modules/mocha/mocha.js"></script>
     <script src="../node_modules/chai/chai.js"></script>
     <script>mocha.setup('bdd')</script>
 
     <!-- load code you want to test here -->
-    <script type="text/javascript" src="../js/src/board.js"></script>
-    <script type="text/javascript" src="../js/src/control.js"></script>
-    <script type="text/javascript" src="../js/src/message.js"></script>
-    <script type="text/javascript" src="../js/src/game.js"></script>
-    <script type="text/javascript" src="../js/src/app.js"></script>
+    <script type="text/javascript" src="../dev/js/board.js"></script>
+    <script type="text/javascript" src="../dev/js/control.js"></script>
+    <script type="text/javascript" src="../dev/js/message.js"></script>
+    <script type="text/javascript" src="../dev/js/game.js"></script>
+    <script type="text/javascript" src="../dev/js/app.js"></script>
 
     <!-- load your test files here -->
     <script src="test.js"></script>
