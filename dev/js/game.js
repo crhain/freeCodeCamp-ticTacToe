@@ -29,18 +29,15 @@ var game = (function(){
   function update(move){
     //if game is over, then short circuit update
     if(gameOver){
-      //console.log('Game over!');
-      //messageWindow.send('Game over!');
       return false;
     }
     //determine if move is valid. An invalid move will be passed as an empty move object
-    if(!move.piece){
+    if(!makeMove(move)){
       console.log('Cannot move there!'); //update to send to message window
       messageWindow.send('Cannot move there!');
       return false;
     }
-    //update board model
-    setBoardSquare(move)
+
     //send move message-panel
     messageWindow.send(move.piece + ": moves " + move.row + ", " + move.column);
     //test for win
@@ -69,6 +66,25 @@ var game = (function(){
     }
     return true;
   }
+  //handels move logic
+  function makeMove(move){
+    if(isMoveValid(move)){
+      //update board model
+      setBoardSquare(move);
+      //update display
+      boardDisplay.update(move);
+      return true;
+    }
+    return false;
+  }
+  //returns if move can be made
+  function isMoveValid(move){
+    if(getBoardSquare(move.row, move.column) !== '' || gameOver){
+      return false;
+    }
+    //console.log('My square value is:' + getBoardSquare(move.row, move.column));
+    return true;
+  }
   //resets the game display and state
   function reset(){
     var buttons = document.querySelectorAll('#board button');
@@ -83,14 +99,6 @@ var game = (function(){
     gameOver = false;
     turn = 1;
   }
-  //returns if move can be made
-  function isMoveValid(move){
-    if(getBoardSquare(move.row, move.column) !== '' || gameOver){
-      return false;
-    }
-    //console.log('My square value is:' + getBoardSquare(move.row, move.column));
-    return true;
-  }
   //returns the current player (X or O)
   function getCurrentPiece(){
     var piece = playerTurn ? playerPiece : computerPiece;
@@ -102,7 +110,19 @@ var game = (function(){
   //****************************************************
   //Game AI and logic
   //****************************************************
+  //handles ai players moves
+  function aiPlayerMove(){
 
+    //go through every square on board
+    //run getMoveScore
+    //track best movescore
+    //make move (need to break out making a move to its own function)
+  }
+  //scores a move depending on various factors - used by ai player to calculate
+  // next move.
+  function getMoveScore(move){
+
+  }
   //determine if a winning move has occured
   function isWin(currentMove){
     //compare current board to various win conditions (8 possible)
@@ -131,14 +151,12 @@ var game = (function(){
         squareMatches++;
       }
     }
-
     if(squareMatches === 3){
       return true;
     }
     else{
       squareMatches = 0;
     }
-
     //now finally we check the diagonals!
     //top left corner
     if(currentMovePositionString === '1,1'){
@@ -169,7 +187,6 @@ var game = (function(){
         return true;
       }
     }
-
     return false;
   }
 
@@ -235,11 +252,15 @@ var game = (function(){
   //add public methods and properties to module
   module.start = start;
   module.update = update;
+  module.makeMove = makeMove;
   module.isMoveValid = isMoveValid;
   module.reset = reset;
   module.getCurrentPiece = getCurrentPiece;
   //private methods and properties exported only for testing
+  module.aiPlayerMove = aiPlayerMove;
+  module.getMoveScore = getMoveScore;
   module.isWin = isWin;
+  module.isTie = isTie;
   module.getBoard = getBoard;
 
   return module;

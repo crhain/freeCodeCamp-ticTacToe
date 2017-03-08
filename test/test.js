@@ -2,7 +2,7 @@ var assert = chai.assert;
 
 //object to get ui elements on test html when needed
 var ui = {
-  resetButton: null,
+  resetButton: document.getElementById('reset-btn'),
   messageWindow: document.getElementById('message-display'),
 };
 
@@ -24,8 +24,28 @@ describe('Array', function() {
     assert.equal(arr.length, 0);
   });
 });
-//Tests for game module
+//*****************************************************************************/
+//GAME MODULE TESTS
+//*****************************************************************************/
+
+
+
 describe('GAME MODULE:', function(){
+  describe('METHOD: makeMove(move)', function(){
+    it('need to write test', function(){
+      assert.isOk(false);
+    });
+  });
+  describe('METHOD: aiPlayerMove()', function(){
+    it('need to write test', function(){
+      assert.isOk(false);
+    });
+  });
+  describe('METHOD: getMoveScore(move)', function(){
+    it('need to write test', function(){
+      assert.isOk(false);
+    });
+  });
   describe('METHOD: isWin', function() {
     it('should not show a win condition', function(){
       var currentMove = {row: 1, column:3, piece: 'X'};
@@ -34,10 +54,8 @@ describe('GAME MODULE:', function(){
         ["", "X", ""],
         ["", "", ""]
       ];
-
       setBoard(board);
       assert.isNotOk(game.isWin(currentMove), 'game lost!');
-
     });
     it('should show a win condition - row', function(){
       //test win in row
@@ -62,8 +80,18 @@ describe('GAME MODULE:', function(){
       assert.isOk(game.isWin(currentMove), 'won by row!');
     });
   });
+  describe('METHOD: isTie', function(){
+    it('need to write test', function(){
+      assert.isOk(false);
+    });
+    it('should return false', function(){
+
+    });
+  });
 });
+//******************************************************************************/
 //MESSAGE CLASS TESTS
+//******************************************************************************/
 describe('MESSAGE CLASS', function(){
   describe('METHOD: send(message)', function(){
     it('it updates outputBuffer with new message', function(){
@@ -83,10 +111,6 @@ describe('MESSAGE CLASS', function(){
       messageDisplay.updateDisplay(message);
       //console.log(messageDisplay.outputBuffer);
       messageDisplay.reset();
-      console.log(messageDisplay);
-      //buffer.splice(0,1);
-      //console.log(messageDisplay.outputBuffer);
-      //console.log(buffer);
       assert.equal(buffer.length, 0);
     });
   });
@@ -127,6 +151,18 @@ describe('MESSAGE CLASS', function(){
       var display = messageDisplay.getDisplayWindow();
       assert.equal(display, messageDisplay.display);
     });
+  });
+});
+//******************************************************************************/
+//CONTROL CLASS TESTS
+//******************************************************************************/
+describe('CONTROL CLASS:', function(){
+  describe('METHOD:', function(){
+    it('reset button works:', function(){
+      var controlPanel = new Control();
+      var button = ui.resetButton;
+      assert.isOk(true);
+    })
   });
 });
 
