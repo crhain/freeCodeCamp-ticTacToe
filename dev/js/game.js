@@ -143,15 +143,15 @@ var game = (function(){
     for(let row = 0; row < board.length; row++){
       for(let column = 0; column < board[row].length; column++){
         move = createMoveFromCoords(row+1, column+1);
-        console.log('testing move:');
-        console.log(move);
+        //console.log('testing move:');
+        //console.log(move);
         if(isMoveValid(move)){
           move.score = getMoveScore(move);
-          console.log('current move:');
-          console.log(move);
+          //console.log('current move:');
+          //console.log(move);
           if(move.score > bestMove.score){
             bestMove = move;
-            console.log('setting bestMove to: ' + bestMove.score);
+            //console.log('setting bestMove to: ' + bestMove.score);
           }
         }
       }

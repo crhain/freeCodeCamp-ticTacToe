@@ -21,7 +21,8 @@ var Board = function () {
       buttons[i].addEventListener('click', function (e) {
         var square = this;
         //console.log('button clicked!');
-        self.update(square);
+        //call game update
+        self.game.update(square);
         e.preventDefault();
       });
     }
@@ -35,30 +36,13 @@ var Board = function () {
         buttons[i].innerHTML = '';
       }
     }
+    //updates the board display - called from game module
+
   }, {
     key: 'update',
-    value: function update(square) {
-      //console.log('my id is:' + square.getAttribute('id'));
-      var move = this.getCurrentMoveOnBoard(square);
-      //update square text if it is currently empty
-      if (this.game.isMoveValid(move)) {
-        square.innerHTML = move.piece;
-        //call update method on enclosing game module to update game model
-        this.game.update(move);
-      } else {
-        //let update know that move is invalid by passing empty move
-        this.game.update({});
-      }
-    }
-  }, {
-    key: 'getCurrentMoveOnBoard',
-    value: function getCurrentMoveOnBoard(square) {
-      var squareIDString = square.getAttribute('id');
-      var squareIDDelminiterPos = squareIDString.indexOf('x');
-      var column = Number.parseInt(squareIDString.substring(0, squareIDDelminiterPos)),
-          row = Number.parseInt(squareIDString.substring(squareIDDelminiterPos + 1));
-      var move = { row: row, column: column, piece: this.game.getCurrentPiece() };
-      return move;
+    value: function update(move) {
+      var squareId = move.id;
+      document.getElementById(squareId).innerHTML = move.piece;
     }
   }]);
 
