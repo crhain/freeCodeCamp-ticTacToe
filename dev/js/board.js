@@ -13,7 +13,7 @@ class Board{
         var square = this;
         //console.log('button clicked!');
         //call game update
-        self.game.update(self.getCurrentMoveOnBoard(square));
+        self.game.update(square);
         e.preventDefault();
       });
     }
@@ -24,23 +24,12 @@ class Board{
       buttons[i].innerHTML = '';
     }
   }
+  //updates the board display - called from game module
   update(move){
     let squareId = move.id;
     document.getElementById(squareId).innerHTML = move.piece;
   }
-  getCurrentMoveOnBoard(square){
-    var squareIDString = square.getAttribute('id');
-    var squareIDDelminiterPos = squareIDString.indexOf('x');
-    var column = Number.parseInt(squareIDString.substring(0, squareIDDelminiterPos)),
-        row = Number.parseInt(squareIDString.substring(squareIDDelminiterPos + 1));
-    var move = {
-                id: squareIDString,
-                row: row,
-                column: column,
-                piece: this.game.getCurrentPiece(),
-              };
-    return move;
-  }
+
 }
 
 
