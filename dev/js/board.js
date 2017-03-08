@@ -27,7 +27,14 @@ class Board{
   //updates the board display - called from game module
   update(move){
     let squareId = move.id;
-    document.getElementById(squareId).innerHTML = move.piece;
+    this.setSquare(this.getSquareById(squareId), move.piece);
+    //document.getElementById(squareId).innerHTML = move.piece;
+  }
+  getSquareById(squareId){
+    return document.getElementById(squareId);
+  }
+  setSquare(square, piece){
+    square.innerHTML = piece;
   }
 
 }
