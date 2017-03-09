@@ -9,7 +9,7 @@ var ui = {
 
 //utility function for tests
 function setBoard(board){
-  var gameBoard = game.board;
+  var gameBoard = game.getBoard();
   for(let row = 0; row < gameBoard.length; row++){
     for(let column = 0; column < gameBoard[row].length; column++){
       gameBoard[row][column] = board[row][column];
@@ -45,17 +45,25 @@ describe('GAME MODULE:', function(){
   describe('METHOD: reset()', function(){
     it('should reset board to empty:', function(){
       clearBoard();
-      game.board[0][0] = "X";
-      //console.log('setting 1x1 to X');
-      //console.log(game.board);
+      game.setBoardCell({row: 1, column: 1, piece: 'X', id: '1x1'});
       game.reset();
-      //game.clearBoard();
-      assert.deepEqual(game.board, [
+      assert.deepEqual(game.getBoard(), [
         ['', '', ''],
         ['', '', ''],
         ['', '', '']
       ]
       );
+    });
+    it('should clear UI board', function(){
+      assert.isOk(false);
+    });
+    it('should clear UI message window', function(){
+      assert.isOk(false);
+    });
+    it('should reset game state', function(){
+      assert.equal(game.isPlayerTurn(), true);
+      assert.equal(game.getGameOver(), false);
+      assert.equal(game.getTurn(), 1);
     });
   });
   describe('METHOD: update(square)', function(){
@@ -76,7 +84,7 @@ describe('GAME MODULE:', function(){
       var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
       var success = game.makeMove(move);
       var square = document.getElementById(move.id);
-      var board = game.board;
+      var board = game.getBoard();
       assert.isOk(success);
     });
     it('square shows correct piece', function(){
@@ -84,7 +92,7 @@ describe('GAME MODULE:', function(){
       var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
       var success = game.makeMove(move);
       var square = document.getElementById(move.id);
-      var board = game.board;
+      var board = game.getBoard();
       assert.equal(square.innerHTML, 'X');
     });
     it('board array updates correctly', function(){
@@ -92,10 +100,11 @@ describe('GAME MODULE:', function(){
       var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
       var success = game.makeMove(move);
       var square = document.getElementById(move.id);
-      var board = game.board;
-      assert.equal(game.board[move.row-1][move.column-1], move.piece);
+      var board = game.getBoard();
+      assert.equal(board[move.row-1][move.column-1], move.piece);
     });
     it('does not make moves outside of board', function(){
+      clearBoard();
       var success = game.makeMove({row: 5, column: 2, piece: 'X', id: '5x2'});
       assert.isNotOk(success);
       success = game.makeMove({row: 1, column: 10, piece: 'X', id: '1x10'});
@@ -216,6 +225,7 @@ describe('GAME MODULE:', function(){
       ];
       setBoard(board);
       assert.equal(game.getBoard(), game.board);
+
     });
   });
   describe('METHOD: clearBoard()', function(){
