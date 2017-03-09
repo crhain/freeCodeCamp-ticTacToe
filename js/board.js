@@ -42,7 +42,18 @@ var Board = function () {
     key: 'update',
     value: function update(move) {
       var squareId = move.id;
-      document.getElementById(squareId).innerHTML = move.piece;
+      this.setSquare(this.getSquareById(squareId), move.piece);
+      //document.getElementById(squareId).innerHTML = move.piece;
+    }
+  }, {
+    key: 'getSquareById',
+    value: function getSquareById(squareId) {
+      return document.getElementById(squareId);
+    }
+  }, {
+    key: 'setSquare',
+    value: function setSquare(square, piece) {
+      square.innerHTML = piece;
     }
   }]);
 

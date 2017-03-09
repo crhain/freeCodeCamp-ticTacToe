@@ -12,6 +12,10 @@ var game = function () {
   var gameOver = false;
   var turn = 1;
 
+  //GAME TOGGLES
+
+  var aiMode = 0; //0 = solo play; 1 = ai on
+
   //PUBLIC METHODS
 
   //initializes all game objects and starts the ball rolling
@@ -20,6 +24,15 @@ var game = function () {
     controlPanel = new Control(this);
     messageWindow = new Message();
   }
+  //resets the game display and state
+  function reset() {
+    clearBoard();
+    boardDisplay.reset();
+    messageWindow.reset();
+    playerTurn = true;
+    gameOver = false;
+    turn = 1;
+  }
   //updates game state for each move
   function update(square) {
     //if game is over, then short circuit update
@@ -27,7 +40,7 @@ var game = function () {
       return false;
     }
 
-    var move = getCurrentMoveOnBoard(square);
+    var move = createMoveFromSquare(square);
     //attempt to make move and if it fails, send messasge
     if (!makeMove(move)) {
       console.log('Cannot move there!'); //update to send to message window
@@ -36,25 +49,14 @@ var game = function () {
     }
     determineGameState(move);
     if (!gameOver) {
-      aiPlayerMove();
+      if (aiMode) {
+        aiPlayerMove();
+      }
       return true;
     }
     return false;
   }
-  //resets the game display and state
-  function reset() {
-    var buttons = document.querySelectorAll('#board button');
-    //reset board array
-    clearBoard();
-    //reset board display
-    boardDisplay.reset();
-    //reset message window
-    messageWindow.reset();
-    //reset variables
-    playerTurn = true;
-    gameOver = false;
-    turn = 1;
-  }
+
   //***************************************************************************/
   //PRIVATE METHODS
   //***************************************************************************/
@@ -73,7 +75,7 @@ var game = function () {
       }
       gameOver = true;
       //resetGame();
-    } else if (isTie()) {
+    } else if (isTie(move)) {
       console.log('You have tied :|'); //update to send to message window
       messageWindow.send('You have tied :|');
       gameOver = true;
@@ -84,48 +86,22 @@ var game = function () {
       turn++;
     }
   }
-  //create a move object from a square passed from board
-  function getCurrentMoveOnBoard(square) {
-    var squareIDString = square.getAttribute('id');
-    var squareIDDelminiterPos = squareIDString.indexOf('x');
-    var row = Number.parseInt(squareIDString.substring(0, squareIDDelminiterPos)),
-        column = Number.parseInt(squareIDString.substring(squareIDDelminiterPos + 1));
-    var move = {
-      id: squareIDString,
-      row: row,
-      column: column,
-      piece: getCurrentPiece()
-    };
-    return move;
-  }
-  //returns the current player (X or O)
-  function getCurrentPiece() {
-    var piece = playerTurn ? playerPiece : computerPiece;
-    return piece;
-  }
-  //handels move logic
+
   function makeMove(move) {
     if (isMoveValid(move)) {
       //update board model
-      setBoardSquare(move);
+      setBoardCell(move);
       //update display
       boardDisplay.update(move);
       return true;
     }
     return false;
   }
-  //returns if move can be made
-  function isMoveValid(move) {
-    if (getBoardSquare(move.row, move.column) !== '' || gameOver) {
-      return false;
-    }
-    //console.log('My square value is:' + getBoardSquare(move.row, move.column));
-    return true;
-  }
+
   //****************************************************
   //MORE PRIVATE METHODS: Game AI and logic
   //****************************************************
-  //handles ai players moves
+
   function aiPlayerMove() {
     var board = getBoard(),
         bestMove = {},
@@ -153,12 +129,7 @@ var game = function () {
     makeMove(bestMove);
     determineGameState(bestMove);
   }
-  function createMoveFromCoords(row, column) {
-    var piece = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : computerPiece;
 
-    var id = row + 'x' + column;
-    return { id: id, row: row, column: column, piece: piece };
-  }
   //STUB: scores a move depending on various factors - used by ai player to calculate
   // next move.
   function getMoveScore(move) {
@@ -169,7 +140,15 @@ var game = function () {
       return Math.floor(Math.random() * (max - min)) + min;
     }
   }
-  //determine if a winning move has occured
+
+  function isMoveValid(move) {
+    if (getBoardCell(move.row, move.column) !== '' || gameOver) {
+      return false;
+    }
+    //console.log('My square value is:' + getBoardCell(move.row, move.column));
+    return true;
+  }
+
   function isWin(currentMove) {
     //compare current board to various win conditions (8 possible)
     var column = 1;
@@ -179,8 +158,8 @@ var game = function () {
     var currentMovePositionString = currentMove.row.toString() + ',' + currentMove.column.toString();
     for (column = 1; column <= 3; column++) {
       //console.log('matching row:' + currentMove.row + ' , column:' + column);
-      //console.log('board piece is:' + getBoardSquare(currentMove.row, column));
-      if (getBoardSquare(currentMove.row, column) === currentMove.piece) {
+      //console.log('board piece is:' + getBoardCell(currentMove.row, column));
+      if (getBoardCell(currentMove.row, column) === currentMove.piece) {
         //console.log('piece matched!');
         squareMatches++;
       }
@@ -192,7 +171,7 @@ var game = function () {
     }
     //next we check to see if all squares in column = to piece
     for (row = 1; row <= 3; row++) {
-      if (getBoardSquare(row, currentMove.column) === currentMove.piece) {
+      if (getBoardCell(row, currentMove.column) === currentMove.piece) {
         squareMatches++;
       }
     }
@@ -204,37 +183,37 @@ var game = function () {
     //now finally we check the diagonals!
     //top left corner
     if (currentMovePositionString === '1,1') {
-      if (getBoardSquare(2, 2) === currentMove.piece && getBoardSquare(3, 3) === currentMove.piece) {
+      if (getBoardCell(2, 2) === currentMove.piece && getBoardCell(3, 3) === currentMove.piece) {
         return true;
       }
       //top right corner
     } else if (currentMovePositionString === '1,3') {
-      if (getBoardSquare(2, 2) === currentMove.piece && getBoardSquare(3, 1) === currentMove.piece) {
+      if (getBoardCell(2, 2) === currentMove.piece && getBoardCell(3, 1) === currentMove.piece) {
         return true;
       }
       // center, so need to check both diagonals
     } else if (currentMovePositionString === '2,2') {
-      if (getBoardSquare(1, 1) === currentMove.piece && getBoardSquare(3, 3) === currentMove.piece) {
+      if (getBoardCell(1, 1) === currentMove.piece && getBoardCell(3, 3) === currentMove.piece) {
         return true;
       }
-      if (getBoardSquare(1, 3) === currentMove.piece && getBoardSquare(3, 1) === currentMove.piece) {
+      if (getBoardCell(1, 3) === currentMove.piece && getBoardCell(3, 1) === currentMove.piece) {
         return true;
       }
       //bottom left corner
     } else if (currentMovePositionString === '3,1') {
-      if (getBoardSquare(2, 2) === currentMove.piece && getBoardSquare(1, 3) === currentMove.piece) {
+      if (getBoardCell(2, 2) === currentMove.piece && getBoardCell(1, 3) === currentMove.piece) {
         return true;
       }
       //bottom right corner
     } else if (currentMovePositionString === '3,3') {
-      if (getBoardSquare(2, 2) === currentMove.piece && getBoardSquare(1, 1) === currentMove.piece) {
+      if (getBoardCell(2, 2) === currentMove.piece && getBoardCell(1, 1) === currentMove.piece) {
         return true;
       }
     }
     return false;
   }
 
-  function isTie() {
+  function isTie(currentMove) {
     var board = getBoard();
     for (var row = 0; row < board.length; row++) {
       for (var column = 0; column < board[row].length; column++) {
@@ -246,22 +225,45 @@ var game = function () {
     return true;
   }
 
+  function createMoveFromSquare(square) {
+    var squareIDString = square.getAttribute('id');
+    var squareIDDelminiterPos = squareIDString.indexOf('x');
+    var row = Number.parseInt(squareIDString.substring(0, squareIDDelminiterPos)),
+        column = Number.parseInt(squareIDString.substring(squareIDDelminiterPos + 1));
+    var move = {
+      id: squareIDString,
+      row: row,
+      column: column,
+      piece: getCurrentPiece()
+    };
+    return move;
+  }
+
+  function createMoveFromCoords(row, column) {
+    var piece = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : computerPiece;
+
+    var id = row + 'x' + column;
+    return { id: id, row: row, column: column, piece: piece };
+  }
+
   //***********************************************
   //GETTERS AND SETTERS AND OTHER UTILITY METHODS
   //***********************************************
+
   function getBoard() {
     return board;
   }
+
   function clearBoard() {
     var board = getBoard();
-    for (var i = 0; i < board.length; i++) {
-      for (var j = 0; j < board[i].length; j++) {
-        board[i][j] = '';
+    for (var row = 0; row < board.length; row++) {
+      for (var column = 0; column < board[row].length; column++) {
+        board[row][column] = '';
       }
     }
   }
-  //returns square from board model
-  function getBoardSquare(row, column) {
+
+  function getBoardCell(row, column) {
     if (column < 1 || row < 1) {
       return false;
     } else if (column > 3 || row > 3) {
@@ -270,8 +272,10 @@ var game = function () {
     var board = getBoard();
     return board[row - 1][column - 1];
   }
-  //sets square within board model
-  function setBoardSquare(move) {
+
+  function setBoardCell(move) {
+    //console.log('setting board cell for move:');
+    //console.log(move);
     var board = getBoard();
     var row = move.row,
         column = move.column,
@@ -282,26 +286,92 @@ var game = function () {
       return false;
     }
     board[row - 1][column - 1] = piece;
+    //console.log('set board cell for move:');
+    //console.log(getBoard());
     return true;
   }
-  //returns current turn
+
+  function getCurrentPiece() {
+    var piece = playerTurn ? playerPiece : computerPiece;
+    return piece;
+  }
+  //STUB
+  function toggleCurrentPiece() {}
+
   function getTurn() {
     return turn;
   }
 
+  function incrementTurn() {
+    turn++;
+  }
+
+  function getGameOver() {
+    return gameOver;
+  }
+
+  function toggleGameOver() {
+    gameOver = !gameOver;
+  }
+
+  function isPlayerTurn() {
+    return playerTurn;
+  }
+
+  function togglePlayerTurn() {
+    playerTurn = !playerTurn;
+  }
+
+  function getAIMode() {
+    return aiMode;
+  }
+
+  function setAIMode(mode) {
+    aiMode = mode;
+  }
+
   //add public methods and properties to module
   module.start = start;
-  module.update = update;
   module.reset = reset;
-  //private methods and properties exported only for testing
+  module.update = update;
+
+  //add private properties to module (for testing)
+  module.board = board;
+  module.playerPiece = playerPiece;
+  module.playerTurn = playerTurn;
+  module.gameOver = gameOver;
+  module.turn = turn;
+  module.aiMode = aiMode;
+
+  //add private methods to module (for testing)
+  module.determineGameState = determineGameState;
   module.makeMove = makeMove;
-  module.isMoveValid = isMoveValid;
-  module.getCurrentPiece = getCurrentPiece;
   module.aiPlayerMove = aiPlayerMove;
   module.getMoveScore = getMoveScore;
+
+  module.isMoveValid = isMoveValid;
   module.isWin = isWin;
   module.isTie = isTie;
+
+  //module.getCurrentMoveOnBoard = getCurrentMoveOnBoard;
+  module.createMoveFromSquare = createMoveFromSquare;
+  module.createMoveFromCoords = createMoveFromCoords;
+
+  //add getters and setters to module (public?)
   module.getBoard = getBoard;
+  module.clearBoard = clearBoard;
+  module.getBoardCell = getBoardCell;
+  module.setBoardCell = setBoardCell;
+  module.getCurrentPiece = getCurrentPiece;
+  module.toggleCurrentPiece = toggleCurrentPiece;
+  module.getTurn = getTurn;
+  module.incrementTurn = incrementTurn;
+  module.getGameOver = getGameOver;
+  module.toggleGameOver = toggleGameOver;
+  module.isPlayerTurn = isPlayerTurn;
+  module.togglePlayerTurn = togglePlayerTurn;
+  module.getAIMode = getAIMode;
+  module.setAIMode = setAIMode;
 
   return module;
 }();
