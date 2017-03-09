@@ -12,7 +12,7 @@ var game = (function(){
     ['', '', '']
   ];
   var playerPiece = 'O';
-  var computerPiece = 'X'
+  var computerPiece = 'X';
   var playerTurn = true;
   var gameOver = false;
   var turn = 1;
@@ -31,14 +31,9 @@ var game = (function(){
   }
   //resets the game display and state
   function reset(){
-    var buttons = document.querySelectorAll('#board button');
-    //reset board array
     clearBoard();
-    //reset board display
     boardDisplay.reset();
-    //reset message window
     messageWindow.reset();
-    //reset variables
     playerTurn = true;
     gameOver = false;
     turn = 1;
@@ -268,9 +263,9 @@ var game = (function(){
 
   function clearBoard(){
     var board = getBoard();
-    for(let i = 0; i < board.length; i++){
-      for(let j = 0; j < board[i].length; j++){
-        board[i][j] = '';
+    for(let row = 0; row < board.length; row++){
+      for(let column = 0; column < board[row].length; column++){
+        board[row][column] = '';
       }
     }
   }
@@ -286,6 +281,8 @@ var game = (function(){
   }
 
   function setBoardCell(move){
+    //console.log('setting board cell for move:');
+    //console.log(move);
     var board = getBoard();
     var row = move.row,
         column = move.column,
@@ -296,6 +293,8 @@ var game = (function(){
       return false;
     }
     board[row-1][column-1] = piece;
+    //console.log('set board cell for move:');
+    //console.log(getBoard());
     return true;
   }
 

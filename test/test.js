@@ -9,12 +9,21 @@ var ui = {
 
 //utility function for tests
 function setBoard(board){
-  var gameBoard = game.getBoard();
+  var gameBoard = game.board;
   for(let row = 0; row < gameBoard.length; row++){
     for(let column = 0; column < gameBoard[row].length; column++){
       gameBoard[row][column] = board[row][column];
     }
   }
+}
+
+function clearBoard(){
+  var board = [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""]
+  ];
+  setBoard(board);
 }
 
 
@@ -33,12 +42,15 @@ describe('GAME MODULE:', function(){
       assert.isOk(false);
     });
   });
-  //STUB
   describe('METHOD: reset()', function(){
     it('should reset board to empty:', function(){
-      game.setBoardSquare(1, 1, playerPiece);
-      game.resetBoard();
-      assert.deepEqual(game.getBoard(), [
+      clearBoard();
+      game.board[0][0] = "X";
+      //console.log('setting 1x1 to X');
+      //console.log(game.board);
+      game.reset();
+      //game.clearBoard();
+      assert.deepEqual(game.board, [
         ['', '', ''],
         ['', '', ''],
         ['', '', '']
@@ -48,27 +60,40 @@ describe('GAME MODULE:', function(){
   });
   describe('METHOD: update(square)', function(){
     it('should actually write this test', function(){
+      clearBoard();
       assert.isOk(false);
     });
   });
   describe('METHOD: determineGameState(move)', function(){
     it('should actually write this test', function(){
+      clearBoard();
       assert.isOk(false);
     });
   });
   describe('METHOD: makeMove(move)', function(){
-    var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
-    var success = game.makeMove(move);
-    var square = document.getElementById(move.id);
     it('succesfully makes move', function(){
+      clearBoard();
+      var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
+      var success = game.makeMove(move);
+      var square = document.getElementById(move.id);
+      var board = game.board;
       assert.isOk(success);
     });
     it('square shows correct piece', function(){
+      clearBoard();
+      var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
+      var success = game.makeMove(move);
+      var square = document.getElementById(move.id);
+      var board = game.board;
       assert.equal(square.innerHTML, 'X');
     });
     it('board array updates correctly', function(){
-      var board = game.getBoard();
-      assert.equal(board[move.row-1][move.column-1], 'X');
+      clearBoard();
+      var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
+      var success = game.makeMove(move);
+      var square = document.getElementById(move.id);
+      var board = game.board;
+      assert.equal(game.board[move.row-1][move.column-1], move.piece);
     });
     it('does not make moves outside of board', function(){
       var success = game.makeMove({row: 5, column: 2, piece: 'X', id: '5x2'});
@@ -78,22 +103,31 @@ describe('GAME MODULE:', function(){
     });
   });
   describe('METHOD: aiPlayerMove()', function(){
+    clearBoard();
     it('need to write test', function(){
       assert.isOk(false);
     });
   });
   describe('METHOD: getMoveScore(move)', function(){
+    clearBoard();
     it('need to write test', function(){
       assert.isOk(false);
     });
   });
   describe('METHOD: isMoveValid(move)', function(){
-    it('should actually write this test', function(){
-      assert.isOk(false);
+    clearBoard();
+    it('returns invalid for move to occupied square', function(){
+      game.board[0][0] = 'O';
+      assert.isNotOk(game.isMoveValid({row: 1, column: 1, piece: 'X', id: '1x1'}));
+    });
+    it('returns valid for move to unoccupied square', function(){
+      clearBoard();
+      assert.isOk(game.isMoveValid({row: 1, column: 2, piece: 'X', id: '1x2'}));
     });
   });
   describe('METHOD: isWin', function() {
     it('should not show a win condition', function(){
+      clearBoard();
       var currentMove = {row: 1, column:3, piece: 'X', id: '1x3'};
       var board = [
         ["", "O", "X"],
@@ -104,7 +138,7 @@ describe('GAME MODULE:', function(){
       assert.isNotOk(game.isWin(currentMove));
     });
     it('should show a win condition - row', function(){
-      //test win in row
+      clearBoard();
       var currentMove = {row: 1, column:3, piece: 'X', id: '1x3'};
       var board = [
         ["X", "X", "X"],
@@ -115,7 +149,7 @@ describe('GAME MODULE:', function(){
       assert.isOk(game.isWin(currentMove));
     });
     it('should show a win condition - column', function(){
-      //test win in row
+      clearBoard();
       var currentMove = {row: 1, column:3, piece: 'X', id: '1x3'};
       var board = [
         ["", "", "X"],
@@ -128,6 +162,7 @@ describe('GAME MODULE:', function(){
   });
   describe('METHOD: isTie', function(){
     it('should not be a tie', function(){
+      clearBoard();
       var currentMove = {row: 1, column:3, piece: 'X', id: '1x3'};
       var board = [
         ['O', 'X', 'X'],
@@ -138,6 +173,7 @@ describe('GAME MODULE:', function(){
       assert.isNotOk(game.isTie(currentMove));
     });
     it('should be a tie', function(){
+      clearBoard();
       var currentMove = {row: 1, column:3, piece: 'O', id: '1x3'};
       var board = [
         ['O', 'X', 'O'],
@@ -145,30 +181,86 @@ describe('GAME MODULE:', function(){
         ['X', 'O', 'X']
       ];
       setBoard(board);
-      console.log(board);
+      //console.log(board);
       assert.isOk(game.isTie(currentMove));
     });
   });
   describe('METHOD: createMoveFromSquare(square)', function(){
-    it('should actually write this test', function(){
-      assert.isOk(false);
+    it('Returns a move object from a square taken from interface', function(){
+      let square = document.createElement('button');
+      square.setAttribute('id', '1x2');
+      var move = game.createMoveFromSquare(square);
+
+      assert.equal(move.row, 1);
+      assert.equal(move.column, 2);
+      assert.equal(move.id, '1x2');
+      assert.equal(move.piece, 'O');
     });
   });
   describe('METHOD: createMoveFromCoords(row, column, piece)', function(){
     it('should actually write this test', function(){
-      assert.isOk(false);
+      let move = game.createMoveFromCoords(3, 2, 'X');
+      assert.equal(move.row, 3);
+      assert.equal(move.column, 2);
+      assert.equal(move.piece, 'X');
+      assert.equal(move.id, '3x2');
     });
   });
-  describe('METHOD: getBoard', function(){
-    it('should actually write this test', function(){
-      assert.isOk(false);
+  describe('METHOD: getBoard()', function(){
+    it('board returned matches module board variable', function(){
+      clearBoard();
+      var board = [
+        ['O', 'X', 'O'],
+        ['X', 'O', 'O'],
+        ['X', 'O', 'X']
+      ];
+      setBoard(board);
+      assert.equal(game.getBoard(), game.board);
     });
   });
   describe('METHOD: clearBoard()', function(){
-    it('should actually write this test', function(){
+    it('Board array should be cleared', function(){
+      clearBoard();
+      var emptyBoard = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+      ];
+      var board = [
+        ['O', 'X', 'O'],
+        ['X', 'O', 'O'],
+        ['X', 'O', 'X']
+      ];
+      setBoard(board);
+      game.clearBoard();
+      assert.deepEqual(game.board, emptyBoard);
+    });
+  });
+  describe('METHOD: getBoardCell(row, column)', function(){
+    it('Board cell is retrieved correctly', function(){
+      clearBoard();
+      game.board[2][0] = 'X';
+      assert.equal(game.getBoardCell(3, 1), 'X');
+    });
+  });
+  describe('METHOD: setBoardCell(move)', function(){
+    it('Board cell is set correctly', function(){
+      clearBoard();
+      game.setBoardCell({row: 3, column: 3, piece: 'X', id: '2x1'});
+      assert.equal(game.board[2][2], 'X');
+    });
+  });
+  describe('METHOD: getCurrentPiece() ', function(){
+    it('Need to write test', function(){
       assert.isOk(false);
     });
   });
+  describe('METHOD: toggleCurrentPiece()', function(){
+    it('Need to write test', function(){
+      assert.isOk(false);
+    });
+  });
+
 });
 //******************************************************************************/
 //BOARD CLASS TESTS
@@ -290,63 +382,3 @@ describe('CONTROL CLASS:', function(){
     })
   });
 });
-
-/*
-describe('METHOD: moveHandler', function(){
-  it('sets correct square:', function(){
-    //some stubs to make this work
-    var button = {id:'2x1', innerHTML: '', getAttribute: getAttribute};
-    function getAttribute(attr){
-      return this.id;
-    }
-    game.moveHandler(button);
-    assert.equal(button.innerHTML, playerPiece);
-    assert.equal(game.getBoardSquare(1, 2), playerPiece);
-    //game.resetBoard();
-  });
-});
-
-
-describe('METHOD: getBoard ', function(){
-  it('should return board from game:', function(){
-    game.resetBoard();
-    assert.equal(game.getBoard(), game.board);
-
-  });
-});
-
-describe('METHOD: setBoardSquare/getBoardSquare', function(){
-  it('does not allow setting outside board size:', function(){
-      game.setBoardSquare(5, 0, 'X');
-      assert.notEqual(game.getBoardSquare(5, 0), playerPiece);
-      assert.notEqual(game.getBoard()[5][0], playerPiece);
-      game.resetBoard();
-  });
-  it('sets correct value:', function(){
-      game.setBoardSquare(1,1, playerPiece);
-      assert.equal(game.getBoardSquare(1, 1), playerPiece);
-      game.resetBoard();
-  });
-});
-
-describe('METHOD: resetBoard', function(){
-  it('should reset board to empty:', function(){
-    game.setBoardSquare(1, 1, playerPiece);
-    game.resetBoard();
-    assert.deepEqual(game.getBoard(), [
-      ['', '', ''],
-      ['', '', ''],
-      ['', '', '']
-    ]
-    );
-  });
-});
-
-
-
-//boilder plate
-///describe('METHOD:', function(){
-//  it(':', function(){
-//  });
-//});
-*/
