@@ -10,6 +10,7 @@ var Control = function Control(game) {
 
   this.game = game;
   this.resetButton = document.getElementById('reset-btn');
+  this.gameModeSelect = document.getElementById('game-mode-select');
   //added for when running tests so that an error is not thrown
   if (!this.resetButton) {
     return;
@@ -17,6 +18,11 @@ var Control = function Control(game) {
   //set up even listener
   this.resetButton.addEventListener('click', function (e) {
     _this.game.reset();
+    e.preventDefault();
+  });
+  this.gameModeSelect.addEventListener('change', function (e) {
+    //console.log(e);      
+    _this.game.setGameMode(parseInt(e.target.value));
     e.preventDefault();
   });
 };
