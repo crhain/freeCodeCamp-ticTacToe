@@ -9,7 +9,7 @@ var ui = {
 
 //utility function for tests
 function setBoard(board){
-  var gameBoard = game.getBoard();
+  var gameBoard = model.getBoard();
   for(let row = 0; row < gameBoard.length; row++){
     for(let column = 0; column < gameBoard[row].length; column++){
       gameBoard[row][column] = board[row][column];
@@ -33,6 +33,92 @@ describe('Array', function() {
     assert.equal(arr.length, 0);
   });
 });
+//*****************************************************************************/
+//MODEL MODULE TESTS
+//*****************************************************************************/
+describe('MODEL MODULE', function(){  
+  describe('METHOD: getBoard()', function(){
+    it('board returned matches module board variable', function(){
+      clearBoard();
+      var board = [
+        ['O', 'X', 'O'],
+        ['X', 'O', 'O'],
+        ['X', 'O', 'X']
+      ];
+      setBoard(board);
+      assert.equal(model.getBoard(), model.board);
+
+    });
+  });
+  describe('METHOD: getRows(...args)', function(){
+    it('returned array is organized in rows - same as input board ;)', function(){
+      var board = [['X', 'X', 'X'], ['Y', 'Y', 'Y'], ['Z', 'Z', 'Z']];
+      assert.equal(model.getRows(board), board);      
+    });
+  });
+  describe('METHOD: getColumns(...args)', function(){
+    it('return array should be organized into columns instead of rows', function(){
+      var board = [['X', 'Y', 'Z'], ['X', 'Y', 'Z'], ['X', 'Y', 'Z']];
+      var compare = [['X', 'X', 'X'], ['Y', 'Y', 'Y'], ['Z', 'Z', 'Z']];
+      assert.deepEqual(model.getColumns(board), compare);
+      
+    });
+  });
+  describe('METHOD: getDiagonals(...args)', function(){
+    it('return array should contain two sets of diagonal arrays', function(){
+      var board = [['X', '', 'Y'], ['', 'X', ''], ['Y', '', 'X']];
+      var compare = [['X', 'X', 'X'], ['Y', 'X', 'Y']];      
+      var diagonals = model.getDiagonals(board);      
+      assert.deepEqual(diagonals, compare);      
+    });
+  }); 
+  describe('METHOD: makeCopyOfBoard', function(){
+    it('copy made!', function(){
+      var copy = model.makeCopyOfBoard(model.board);
+      assert.notEqual(copy, model.board);
+    });
+    it('does not update old', function(){
+      var copy = model.makeCopyOfBoard(model.board);
+      copy[0][0] = "X";
+      assert.notEqual(copy[0][0], model.board[0][0]);
+    });
+  });
+  
+  describe('METHOD: clearBoard()', function(){
+    it('Board array should be cleared', function(){
+      clearBoard();
+      var emptyBoard = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+      ];
+      var board = [
+        ['O', 'X', 'O'],
+        ['X', 'O', 'O'],
+        ['X', 'O', 'X']
+      ];
+      setBoard(board);
+      model.clearBoard();
+      assert.deepEqual(model.board, emptyBoard);
+    });
+  });
+  describe('METHOD: getBoardCell(row, column)', function(){
+    it('Board cell is retrieved correctly', function(){
+      clearBoard();
+      model.board[2][0] = 'X';
+      assert.equal(model.getBoardCell(3, 1), 'X');
+    });
+  });
+  describe('METHOD: setBoardCell(move)', function(){
+    it('Board cell is set correctly', function(){
+      clearBoard();
+      model.setBoardCell({row: 3, column: 3, piece: 'X', id: '2x1'});
+      assert.equal(model.board[2][2], 'X');
+    });
+  });
+});
+
+
 //*****************************************************************************/
 //GAME MODULE TESTS
 //*****************************************************************************/
@@ -97,9 +183,9 @@ describe('GAME MODULE:', function(){
   describe('METHOD: reset()', function(){
     it('should reset board to empty:', function(){
       clearBoard();
-      game.setBoardCell({row: 1, column: 1, piece: 'X', id: '1x1'});
+      model.setBoardCell({row: 1, column: 1, piece: 'X', id: '1x1'});
       game.reset();
-      assert.deepEqual(game.getBoard(), [
+      assert.deepEqual(model.getBoard(), [
         ['', '', ''],
         ['', '', ''],
         ['', '', '']
@@ -136,7 +222,7 @@ describe('GAME MODULE:', function(){
       var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
       var success = game.makeMove(move);
       var square = document.getElementById(move.id);
-      var board = game.getBoard();
+      var board = model.getBoard();
       assert.isOk(success);
     });
     it('square shows correct piece', function(){
@@ -144,7 +230,7 @@ describe('GAME MODULE:', function(){
       var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
       var success = game.makeMove(move);
       var square = document.getElementById(move.id);
-      var board = game.getBoard();
+      var board = model.getBoard();
       assert.equal(square.innerHTML, 'X');
     });
     it('board array updates correctly', function(){
@@ -152,7 +238,7 @@ describe('GAME MODULE:', function(){
       var move = {row: 1, column: 2, piece: 'X', id: '1x2'};
       var success = game.makeMove(move);
       var square = document.getElementById(move.id);
-      var board = game.getBoard();
+      var board = model.getBoard();
       assert.equal(board[move.row-1][move.column-1], move.piece);
     });
     it('does not make moves outside of board', function(){
@@ -178,7 +264,7 @@ describe('GAME MODULE:', function(){
   describe('METHOD: isMoveValid(move)', function(){
     clearBoard();
     it('returns invalid for move to occupied square', function(){
-      game.board[0][0] = 'O';
+      model.board[0][0] = 'O';
       assert.isNotOk(game.isMoveValid({row: 1, column: 1, piece: 'X', id: '1x1'}));
     });
     it('returns valid for move to unoccupied square', function(){
@@ -267,74 +353,6 @@ describe('GAME MODULE:', function(){
       assert.equal(move.id, '3x2');
     });
   });
-  describe('METHOD: getBoard()', function(){
-    it('board returned matches module board variable', function(){
-      clearBoard();
-      var board = [
-        ['O', 'X', 'O'],
-        ['X', 'O', 'O'],
-        ['X', 'O', 'X']
-      ];
-      setBoard(board);
-      assert.equal(game.getBoard(), game.board);
-
-    });
-  });
-  describe('METHOD: makeCopyOfBoard', function(){
-    it('copy made!', function(){
-      var copy = game.makeCopyOfBoard(game.board);
-      assert.notEqual(copy, game.board);
-    });
-    it('does not update old', function(){
-      var copy = game.makeCopyOfBoard(game.board);
-      copy[0][0] = "X";
-      assert.notEqual(copy[0][0], game.board[0][0]);
-    });
-  });
-  describe('METHOD: applyToBoardRows(board, func, ...args)', function(){
-    it('should run correctly', function(){
-      let board = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-      ];
-      let value = applyToBoardRows(board, function(){
-
-      });
-    });
-  });
-  describe('METHOD: clearBoard()', function(){
-    it('Board array should be cleared', function(){
-      clearBoard();
-      var emptyBoard = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-      ];
-      var board = [
-        ['O', 'X', 'O'],
-        ['X', 'O', 'O'],
-        ['X', 'O', 'X']
-      ];
-      setBoard(board);
-      game.clearBoard();
-      assert.deepEqual(game.board, emptyBoard);
-    });
-  });
-  describe('METHOD: getBoardCell(row, column)', function(){
-    it('Board cell is retrieved correctly', function(){
-      clearBoard();
-      game.board[2][0] = 'X';
-      assert.equal(game.getBoardCell(3, 1), 'X');
-    });
-  });
-  describe('METHOD: setBoardCell(move)', function(){
-    it('Board cell is set correctly', function(){
-      clearBoard();
-      game.setBoardCell({row: 3, column: 3, piece: 'X', id: '2x1'});
-      assert.equal(game.board[2][2], 'X');
-    });
-  });
   describe('METHOD: getCurrentPiece() ', function(){
     it('Need to write test', function(){
       assert.isOk(false);
@@ -345,8 +363,6 @@ describe('GAME MODULE:', function(){
       assert.isOk(false);
     });
   });
-
-
 });
 //******************************************************************************/
 //BOARD CLASS TESTS

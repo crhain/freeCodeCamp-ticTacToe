@@ -16,6 +16,7 @@ var game = (function(board){
   //GAME TOGGLES
 
   var aiMode = 0;  //0 = solo play; 1 = ai on
+  var debug = true; //enable debug mode for testing
 
   //PUBLIC METHODS
     //add public methods and properties to module
@@ -23,31 +24,32 @@ var game = (function(board){
   module.reset = reset;
   module.update = update;
 
-  //add private properties to module (for testing)
-  module.board = board;
-  module.playerPiece = playerPiece;
-  module.playerTurn = playerTurn;
-  module.gameOver = gameOver;
-  module.turn = turn;
-  module.aiMode = aiMode;
+  if(debug){
+    //add private properties to module (for testing)
+    module.board = board;
+    module.playerPiece = playerPiece;
+    module.playerTurn = playerTurn;
+    module.gameOver = gameOver;
+    module.turn = turn;
+    module.aiMode = aiMode;
 
-  //add private methods to module (for testing)
-  module.determineGameState = determineGameState;
-  module.makeMove = makeMove;
-  module.aiPlayerMove = aiPlayerMove;
-  module.getMoveScore = getMoveScore;
-  module.getScore = getScore;
+    //add private methods to module (for testing)
+    module.determineGameState = determineGameState;
+    module.makeMove = makeMove;
+    module.aiPlayerMove = aiPlayerMove;
+    module.getMoveScore = getMoveScore;
+    module.getScore = getScore;
 
-  module.isMoveValid = isMoveValid;
-  module.isWin = isWin;
-  module.isTie = isTie;
+    module.isMoveValid = isMoveValid;
+    module.isWin = isWin;
+    module.isTie = isTie;
 
-  //module.getCurrentMoveOnBoard = getCurrentMoveOnBoard;
-  module.createMoveFromSquare = createMoveFromSquare;
-  module.createMoveFromCoords = createMoveFromCoords;
-
-  //add getters and setters to module (public?)
+    //module.getCurrentMoveOnBoard = getCurrentMoveOnBoard;
+    module.createMoveFromSquare = createMoveFromSquare;
+    module.createMoveFromCoords = createMoveFromCoords;
+  }
   
+  //add getters and setters to module (public?)  
   module.getCurrentPiece = getCurrentPiece;
   module.toggleCurrentPiece = toggleCurrentPiece;
   module.getTurn = getTurn;
@@ -58,9 +60,6 @@ var game = (function(board){
   module.togglePlayerTurn = togglePlayerTurn;
   module.getAIMode = getAIMode;
   module.setAIMode = setAIMode;
-
-  
-
 
   //initializes all game objects and starts the ball rolling
   function start(){
