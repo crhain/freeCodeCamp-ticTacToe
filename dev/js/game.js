@@ -15,14 +15,15 @@ var game = (function(board){
 
   //GAME TOGGLES
 
-  var aiMode = 1;  //0 = solo play; 1 = ai on
+  var gameMode = 1;  //0 = solo play; 1 = ai on
   var debug = true; //enable debug mode for testing
 
   //PUBLIC METHODS
     //add public methods and properties to module
   module.start = start;
-  module.reset = reset;
   module.update = update;
+  module.reset = reset;
+  
 
   if(debug){
     //add private properties to module (for testing)
@@ -31,7 +32,7 @@ var game = (function(board){
     module.playerTurn = playerTurn;
     module.gameOver = gameOver;
     module.turn = turn;
-    module.aiMode = aiMode;
+    module.gameMode = gameMode;    
 
     //add private methods to module (for testing)
     module.determineGameState = determineGameState;
@@ -58,8 +59,9 @@ var game = (function(board){
   module.toggleGameOver = toggleGameOver;
   module.isPlayerTurn = isPlayerTurn;
   module.togglePlayerTurn = togglePlayerTurn;
-  module.getAIMode = getAIMode;
-  module.setAIMode = setAIMode;
+  module.getGameMode = getGameMode;
+  module.setGameMode = setGameMode;
+  
 
   //initializes all game objects and starts the ball rolling
   function start(){
@@ -92,7 +94,7 @@ var game = (function(board){
     }
     determineGameState(move);
     if(!gameOver) {
-      if(aiMode) { aiPlayerMove(); }
+      if(gameMode) { aiPlayerMove(); }
       return true;
     }
     return false;
@@ -146,13 +148,12 @@ var game = (function(board){
   //****************************************************
   //MORE PRIVATE METHODS: Game AI and logic
   //****************************************************
-
-  function aiPlayerMove(){
-    
+  
+  //METHOD: aiPlayerMove() - simple heuristic scoring alogrithim (i.e. getMoveScore)
+  function aiPlayerMove(){    
     var bestMove = {},
         move = {},
         score = 0;
-
     bestMove.score = 0;
     move.score = 0;
     
@@ -171,12 +172,17 @@ var game = (function(board){
     }
     if(!bestMove.hasOwnProperty('row')){
       bestMove = JSON.parse(JSON.stringify(move));
+      console.log('error! no best move!');
     } 
     //make move
-    //if(makeMove(bestMove)){ determineGameState(bestMove); }
-    if(!bestMove.hasOwnProperty('row')){ console.log('error! no best move!'); }
-    makeMove(bestMove);
-    determineGameState(bestMove);
+    if(makeMove(bestMove)){ determineGameState(bestMove); }    
+    //makeMove(bestMove);
+    //determineGameState(bestMove);
+  }
+
+  //METHOD: perfectAiPlayerMove() - uses min/max search algorithim and heuristic scoring
+  function perfectAiPlayerMove(){
+
   }
 
   //METHOD: getMoveScore(move: object, [board: array])
@@ -209,10 +215,7 @@ var game = (function(board){
     totalScore += getScore( board.getColumns(testBoard) );
     totalScore += getScore( board.getDiagonals(testBoard) );
     
-    return totalScore;
-    //now we return reduced scores array    
-    //return scores.reduce(((acc, el) => acc += el), 0);     
-             
+    return totalScore;                     
   }
   //METHOD: getScore(board: array)
   function getScore(board){  
@@ -400,12 +403,18 @@ var game = (function(board){
     playerTurn = !playerTurn;
   }
 
-  function getAIMode(){
-    return aiMode;
+  function getGameMode(){
+    if(debug){
+      return this.gameMode;
+    }
+    return gameMode;
   }
 
-  function setAIMode(mode){
-    aiMode = mode;
+  function setGameMode(mode){
+    if(debug){
+      this.gameMode = mode;
+    }
+    gameMode = mode;
   }
 
   return module;

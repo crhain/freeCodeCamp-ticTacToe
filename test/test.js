@@ -353,6 +353,23 @@ describe('GAME MODULE:', function(){
       assert.equal(move.id, '3x2');
     });
   });
+  describe('METHOD: getGameMode() ', function(){
+    it('should return gameMode', function(){
+      assert.equal(game.getGameMode(), game.gameMode);
+    });
+  });
+  describe('METHOD: setGameMode(mode) ', function(){
+    it('should set gameMode to solo play (0)', function(){
+      game.setGameMode(0);
+      assert.equal(game.gameMode, 0);
+    });
+  });
+  describe('METHOD: setGameMode(mode) ', function(){
+    it('should set gameMode to normal mode (1)', function(){
+      game.setGameMode(1);
+      assert.equal(game.gameMode, 1);
+    });
+  });
   describe('METHOD: getCurrentPiece() ', function(){
     it('Need to write test', function(){
       assert.isOk(false);
