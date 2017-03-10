@@ -15,7 +15,7 @@ var game = (function(board){
 
   //GAME TOGGLES
 
-  var aiMode = 0;  //0 = solo play; 1 = ai on
+  var aiMode = 1;  //0 = solo play; 1 = ai on
   var debug = true; //enable debug mode for testing
 
   //PUBLIC METHODS
@@ -148,12 +148,13 @@ var game = (function(board){
   //****************************************************
 
   function aiPlayerMove(){
-    let board = board.getBoard(),
-        bestMove = {},
+    
+    var bestMove = {},
         move = {},
         score = 0;
-        bestMove.score = 0;
-        move.score = 0;
+
+    bestMove.score = 0;
+    move.score = 0;
     
     //go through every square on board
     for(let row = 0; row < 3; row++){
@@ -161,14 +162,16 @@ var game = (function(board){
         move = createMoveFromCoords(row+1, column+1);
         move.score = 0;             
         if(isMoveValid(move)){
-          score = getMoveScore(move);
-          move.score = score;     
+          move.score = getMoveScore(move);               
           if(move.score >= bestMove.score){
             bestMove = JSON.parse(JSON.stringify(move)); //hack to copy one object to another
           }
         }
       }
     }
+    if(!bestMove.hasOwnProperty('row')){
+      bestMove = JSON.parse(JSON.stringify(move));
+    } 
     //make move
     //if(makeMove(bestMove)){ determineGameState(bestMove); }
     if(!bestMove.hasOwnProperty('row')){ console.log('error! no best move!'); }
