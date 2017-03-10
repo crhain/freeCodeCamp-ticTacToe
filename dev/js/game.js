@@ -111,43 +111,82 @@ var game = (function(){
   function aiPlayerMove(){
     let board = getBoard(),
         bestMove = {},
-        move = {};
-    bestMove.score = 0;
+        move = {},
+        score = 0;
+        bestMove.score = 0;
+        move.score = 0;
+    
     //go through every square on board
-    for(let row = 0; row < board.length; row++){
-      for(let column = 0; column < board[row].length; column++){
+    for(let row = 0; row < 3; row++){
+      for(let column = 0; column < 3; column++){
         move = createMoveFromCoords(row+1, column+1);
-        //console.log('testing move:');
-        //console.log(move);
+        move.score = 0;             
         if(isMoveValid(move)){
-          move.score = getMoveScore(move);
-          //console.log('current move:');
-          //console.log(move);
-          if(move.score > bestMove.score){
-            bestMove = move;
+          score = getMoveScore(move);
+          move.score = score;     
+          if(move.score >= bestMove.score){
+            bestMove = JSON.parse(JSON.stringify(move)); //hack to copy one object to another
             //console.log('setting bestMove to: ' + bestMove.score);
           }
         }
+        
       }
     }
     //make move
     //if(makeMove(bestMove)){ determineGameState(bestMove); }
+    if(!bestMove.hasOwnProperty('row')){ console.log('error! no best move!'); }
     makeMove(bestMove);
     determineGameState(bestMove);
   }
 
   //STUB: scores a move depending on various factors - used by ai player to calculate
   // next move.
-  function getMoveScore(move){
-    return getRandomInt(1, 100);
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min;
+  function getMoveScore(move){    
+    
+    //move score:
+    // 1. score each unit (columns, rows, diagonals) with regards to potential move
+    //   +100 = computer: unit that will have three in a row
+    //   +10  = computer: unit that will have two in a row with one empty
+    //   +1   = computer: unit that will have one with two empty
+    //   -100 = player:   unit that will have three in a row
+    //   -10  = player:   unit that will have two in a row
+    //   -1   = player:   unit that will have one in a row
+    //    0   = empty unit
+    // 2. return total sum for that cell    
+    let piece = move.piece;
+    let cell = '';
+    //1. create virtual board from board
+    let testBoard = makeCopyOfBoard(getBoard());//Array.prototype.slice.call(board);
+    //2. create container for score units (3 rows, 3 columns, and 2 diagonals)
+    let scores = [];
+    let score = 0;
+    let i = 0;
+    //3. place computer test move
+    testBoard[move.row-1][move.column-1] = piece;
+   
+
+    //score translation utlity function
+    function translateScoreToFinal(score){
+      var newScore = 0;
+      if(score === 0){ 
+        newScore = score; 
+      } else 
+      if(score < 0){ 
+        newScore = -(10 ** (Math.abs(score) - 1) ); 
+      } else {
+        newScore = 10 ** (Math.abs(score) - 1);
+      }
+
+      return newScore; //just in case
     }
+
+    //now we return reduced scores array
+    
+    return scores.reduce(((acc, el) => acc += el), 0);     
+             
   }
 
-
+  
   function isMoveValid(move){
     if(getBoardCell(move.row, move.column) !== '' || gameOver){
       return false;
@@ -260,6 +299,14 @@ var game = (function(){
   function getBoard(){
     return board;
   }
+  
+  function makeCopyOfBoard(board){    
+    var copy = [];    
+    for(let row = 0; row < board.length; row++){      
+      copy.push(board[row].slice());
+    }
+    return copy;        
+  }
 
   function clearBoard(){
     var board = getBoard();
@@ -339,6 +386,51 @@ var game = (function(){
     aiMode = mode;
   }
 
+  function getBoardRows(board){
+    return board;
+  }
+  
+  function getBoardColumns(board){
+    var columns = [];          
+    for(let row = 0; row < board.length; row++){
+      for(let column = 0; column < board[row].length; column++){
+        if(columns.length < column + 1){
+          columns.push([]);
+        }                 
+        columns[column].push(board[row][column]);
+      }      
+    }    
+    return columns;    
+  }
+
+  function getBoardDiagonals(board){
+
+  }
+
+
+
+  function getScore(board){  
+    let score = 0;
+    score = board.reduce(((value, row) => {             
+      let rowTotal = row.reduce(((total, cell) => {
+        if(cell === 'X'){ 
+          return total < 0 ? -100 : total += 1;        
+        }else
+        if(cell === 'O'){ 
+          return total > 0 ? 100 : total -= 1; 
+        }else
+        if(cell === '') { 
+          return total += 0;
+        }      
+      }), 0);
+
+      return Math.abs(rowTotal) > 3 ? value += 0 : value += rowTotal;
+
+    }), 0);
+    return score;
+}
+
+
   //add public methods and properties to module
   module.start = start;
   module.reset = reset;
@@ -382,6 +474,13 @@ var game = (function(){
   module.getAIMode = getAIMode;
   module.setAIMode = setAIMode;
 
+  module.makeCopyOfBoard = makeCopyOfBoard;
+  module.getScore = getScore;
+
   return module;
 
 })();
+
+
+
+

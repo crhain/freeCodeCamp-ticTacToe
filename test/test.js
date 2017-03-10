@@ -37,6 +37,58 @@ describe('Array', function() {
 //GAME MODULE TESTS
 //*****************************************************************************/
 describe('GAME MODULE:', function(){
+  describe('METHOD: getScore(board)', function(){
+    it('should return 0 for row: o,x,x', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['O', 'X', 'X'], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 0);
+    });
+    it('should return 0 for row: x,o,x', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['X', 'O', 'X'], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 0);
+    });
+    it('should return 0 for row: x,o,o', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['X', 'O', 'O'], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 0);
+    });
+    it('should return 0 for row: x,,o', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['X', '', 'O'], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 0);
+    });
+    it('should return 3 for row: x,x,x', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['X', 'X', 'X'], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 3);
+    });
+    it('should return -3 for row: o,o,o', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['O', 'O', 'O'], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), -3);
+    });
+    it('should return 2 for row: x,x,', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['X', 'X', ''], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 2);
+    });
+    it('should return 1 for row: x,,', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['X', '', ''], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 1);
+    });
+    it('should return 0 for row: ,,', function(){
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 0);
+    });
+    it('should return 5 for rows: x,x,x and x,, and ,x,', function(){
+      let board = [['X', 'X', 'X'], ['X', '', ''], ['', 'X', '']];
+      //let board = [['', '', ''], ['', '', ''], ['', '', '']];
+      assert.equal(game.getScore(board), 5);
+    });
+  });
   describe('METHOD: start()', function(){
     it('should actually write this test', function(){
       assert.isOk(false);
@@ -228,6 +280,29 @@ describe('GAME MODULE:', function(){
 
     });
   });
+  describe('METHOD: makeCopyOfBoard', function(){
+    it('copy made!', function(){
+      var copy = game.makeCopyOfBoard(game.board);
+      assert.notEqual(copy, game.board);
+    });
+    it('does not update old', function(){
+      var copy = game.makeCopyOfBoard(game.board);
+      copy[0][0] = "X";
+      assert.notEqual(copy[0][0], game.board[0][0]);
+    });
+  });
+  describe('METHOD: applyToBoardRows(board, func, ...args)', function(){
+    it('should run correctly', function(){
+      let board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+      ];
+      let value = applyToBoardRows(board, function(){
+
+      });
+    });
+  });
   describe('METHOD: clearBoard()', function(){
     it('Board array should be cleared', function(){
       clearBoard();
@@ -270,6 +345,7 @@ describe('GAME MODULE:', function(){
       assert.isOk(false);
     });
   });
+
 
 });
 //******************************************************************************/
