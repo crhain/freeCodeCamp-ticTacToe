@@ -101,7 +101,8 @@ var game = (function(board){
   //***************************************************************************/
   //PRIVATE METHODS
   //***************************************************************************/
-  //update game state for each move made
+
+  //METHOD: determineGameState(move: object)
   function determineGameState(move){
     //send move to message-panel
     messageWindow.send(move.piece + ": moves " + move.row + ", " + move.column);
@@ -130,7 +131,7 @@ var game = (function(board){
       turn++;
     }
   }
-
+  //METHOD: makeMove(move: object)
   function makeMove(move){
     if(isMoveValid(move)){
       //update board model
@@ -164,10 +165,8 @@ var game = (function(board){
           move.score = score;     
           if(move.score >= bestMove.score){
             bestMove = JSON.parse(JSON.stringify(move)); //hack to copy one object to another
-            //console.log('setting bestMove to: ' + bestMove.score);
           }
         }
-        
       }
     }
     //make move
@@ -177,12 +176,10 @@ var game = (function(board){
     determineGameState(bestMove);
   }
 
-  //STUB: scores a move depending on various factors - used by ai player to calculate
-  // next move.
-  function getMoveScore(move){    
-    
+  //METHOD: getMoveScore(move: object, [board: array])
+  function getMoveScore(move, ...args){    
     //move score:
-    // 1. score each unit (columns, rows, diagonals) with regards to potential move
+    //  score each unit (columns, rows, diagonals) with regards to potential move
     //   +100 = computer: unit that will have three in a row
     //   +10  = computer: unit that will have two in a row with one empty
     //   +1   = computer: unit that will have one with two empty
@@ -190,43 +187,31 @@ var game = (function(board){
     //   -10  = player:   unit that will have two in a row
     //   -1   = player:   unit that will have one in a row
     //    0   = empty unit
-    // 2. return total sum for that cell    
-    let piece = move.piece;
-    let cell = '';
-    //1. create virtual board from board
-    let testBoard = board.makeCopyOfBoard(board.getBoard());
-    //2. create container for score units (3 rows, 3 columns, and 2 diagonals)
-    let scores = [];
-    let score = 0;
-    let i = 0;
-    //3. place computer test move
-    testBoard[move.row-1][move.column-1] = piece;
-   
-    score += getScore(board.getRows(testBoard));
-    score += getScore(board.getColumns(testBoard));
-    score += getScore(board.getDiagonals(testBoard));
 
-    //score translation utlity function
-    function translateScoreToFinal(score){
-      var newScore = 0;
-      if(score === 0){ 
-        newScore = score; 
-      } else 
-      if(score < 0){ 
-        newScore = -(10 ** (Math.abs(score) - 1) ); 
-      } else {
-        newScore = 10 ** (Math.abs(score) - 1);
-      }
-
-      return newScore; //just in case
+    //use supplied board or create copy of board
+    let testBoard;
+    if(args && args.length > 0){
+      testBoard = args[0];
     }
-
-    //now we return reduced scores array
+    else{
+      testBoard = board.makeCopyOfBoard();
+    }        
+    //2. create container for each scored unit (3 rows, 3 columns, and 2 diagonals) and totalScore    
+    let scores = [];
+    let totalScore = 0;    
+    //3. place computer test move
+    testBoard[move.row-1][move.column-1] = move.piece;
+   //4. sum up scores for all columns, rows, and diagonals
+    totalScore += getScore( board.getRows(testBoard) );
+    totalScore += getScore( board.getColumns(testBoard) );
+    totalScore += getScore( board.getDiagonals(testBoard) );
     
-    return scores.reduce(((acc, el) => acc += el), 0);     
+    return totalScore;
+    //now we return reduced scores array    
+    //return scores.reduce(((acc, el) => acc += el), 0);     
              
   }
-
+  //METHOD: getScore(board: array)
   function getScore(board){  
       let score = 0;
       score = board.reduce(((value, row) => {             
@@ -241,13 +226,32 @@ var game = (function(board){
             return total += 0;
           }      
         }), 0);
-
-        return Math.abs(rowTotal) > 3 ? value += 0 : value += rowTotal;
-
+        let subTotal = 0; 
+        if(Math.abs(rowTotal) > 3){
+          subTotal = value + 0;
+        }else{
+          subTotal = value + translateScoreToFinal(rowTotal);
+        }
+        return subTotal;        
+        //return Math.abs(subTotal) > 3 ? value += 0 : value += subTotal;
+          
       }), 0);
+      //UTILITY FUNCTION: translateScoreToFinal(score: int)
+      function translateScoreToFinal(score){
+        var newScore = 0;
+        if(score === 0){ 
+          newScore = score; 
+        } else 
+        if(score < 0){ 
+          newScore = -(10 ** (Math.abs(score) - 1) ); 
+        } else {
+          newScore = 10 ** (Math.abs(score) - 1);
+        }        
+        return newScore;
+      }
+      //return final score from getScore(board: array)
       return score;
   }      
-
   
   function isMoveValid(move){
     if(board.getBoardCell(move.row, move.column) !== '' || gameOver){

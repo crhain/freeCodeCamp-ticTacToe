@@ -144,20 +144,20 @@ describe('GAME MODULE:', function(){
       let board = [['X', '', 'O'], ['', '', ''], ['', '', '']];
       assert.equal(game.getScore(board), 0);
     });
-    it('should return 3 for row: x,x,x', function(){
+    it('should return 100(3) for row: x,x,x', function(){
       //let board = [['', '', ''], ['', '', ''], ['', '', '']];
       let board = [['X', 'X', 'X'], ['', '', ''], ['', '', '']];
-      assert.equal(game.getScore(board), 3);
+      assert.equal(game.getScore(board), 100);
     });
-    it('should return -3 for row: o,o,o', function(){
+    it('should return -100(-3) for row: o,o,o', function(){
       //let board = [['', '', ''], ['', '', ''], ['', '', '']];
       let board = [['O', 'O', 'O'], ['', '', ''], ['', '', '']];
-      assert.equal(game.getScore(board), -3);
+      assert.equal(game.getScore(board), -100);
     });
-    it('should return 2 for row: x,x,', function(){
+    it('should return 10(2) for row: x,x,', function(){
       //let board = [['', '', ''], ['', '', ''], ['', '', '']];
       let board = [['X', 'X', ''], ['', '', ''], ['', '', '']];
-      assert.equal(game.getScore(board), 2);
+      assert.equal(game.getScore(board), 10);
     });
     it('should return 1 for row: x,,', function(){
       //let board = [['', '', ''], ['', '', ''], ['', '', '']];
@@ -169,10 +169,10 @@ describe('GAME MODULE:', function(){
       let board = [['', '', ''], ['', '', ''], ['', '', '']];
       assert.equal(game.getScore(board), 0);
     });
-    it('should return 5 for rows: x,x,x and x,, and ,x,', function(){
+    it('should return 102(5) for rows: x,x,x and x,, and ,x,', function(){
       let board = [['X', 'X', 'X'], ['X', '', ''], ['', 'X', '']];
       //let board = [['', '', ''], ['', '', ''], ['', '', '']];
-      assert.equal(game.getScore(board), 5);
+      assert.equal(game.getScore(board), 102);
     });
   });
   describe('METHOD: start()', function(){

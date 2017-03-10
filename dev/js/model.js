@@ -1,3 +1,4 @@
+'use strict';
 var model = (function(...args){
   var module = {},
       board = [ 
