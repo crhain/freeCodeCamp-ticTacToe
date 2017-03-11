@@ -6,8 +6,8 @@ var game = function (board) {
   //PRIVATE PROPERTIES
   var boardDisplay, controlPanel, messageWindow;
   var board = board;
-  var playerPiece = 'O';
-  var computerPiece = 'X';
+  var playerPiece = 'X';
+  var computerPiece = 'O';
   var playerTurn = true;
   var gameOver = false;
   var turn = 1;
@@ -49,13 +49,15 @@ var game = function (board) {
   }
 
   //add getters and setters to module (public?)  
+  module.getPlayerPiece = getPlayerPiece;
+  module.setPlayerPiece = setPlayerPiece;
   module.getCurrentPiece = getCurrentPiece;
   module.toggleCurrentPiece = toggleCurrentPiece;
   module.getTurn = getTurn;
   module.incrementTurn = incrementTurn;
   module.getGameOver = getGameOver;
   module.toggleGameOver = toggleGameOver;
-  module.isPlayerTurn = isPlayerTurn;
+  module.getIsPlayerTurn = getIsPlayerTurn;
   module.togglePlayerTurn = togglePlayerTurn;
   module.getGameMode = getGameMode;
   module.setGameMode = setGameMode;
@@ -77,25 +79,33 @@ var game = function (board) {
   }
   //updates game state for each move
   function update(square) {
-    //if game is over, then short circuit update
+    //if game is over, then restart game on click
+    var gameOver = getGameOver();
+    var gameMode = getGameMode();
+
     if (gameOver) {
+      reset();
       return false;
     }
 
-    var move = createMoveFromSquare(square);
-    //attempt to make move and if it fails, send messasge
-    if (!makeMove(move)) {
-      console.log('Cannot move there!'); //update to send to message window
-      messageWindow.send('Cannot move there!');
-      return false;
+    if (getIsPlayerTurn() || gameMode === 0) {
+      var move = createMoveFromSquare(square);
+      //attempt to make move and if it fails, send messasge
+      if (!makeMove(move)) {
+        console.log('Cannot move there!'); //update to send to message window
+        messageWindow.send('Cannot move there!');
+        return false;
+      }
+      determineGameState(move);
     }
-    determineGameState(move);
+
     if (!gameOver) {
-      if (gameMode) {
+      if (gameMode > 0) {
         aiPlayerMove();
       }
       return true;
     }
+
     return false;
   }
 
@@ -222,9 +232,9 @@ var game = function (board) {
     var score = 0;
     score = board.reduce(function (value, row) {
       var rowTotal = row.reduce(function (total, cell) {
-        if (cell === 'X') {
+        if (cell === computerPiece) {
           return total < 0 ? -100 : total += 1;
-        } else if (cell === 'O') {
+        } else if (cell === playerPiece) {
           return total > 0 ? 100 : total -= 1;
         } else if (cell === '') {
           return total += 0;
@@ -370,6 +380,15 @@ var game = function (board) {
     return piece;
   }
   //STUB
+  function getPlayerPiece() {
+    return playerPiece;
+  }
+
+  function setPlayerPiece(piece) {
+    playerPiece = piece;
+    computerPiece = piece === 'X' ? 'O' : 'X';
+  }
+
   function toggleCurrentPiece() {}
 
   function getTurn() {
@@ -388,7 +407,7 @@ var game = function (board) {
     gameOver = !gameOver;
   }
 
-  function isPlayerTurn() {
+  function getIsPlayerTurn() {
     return playerTurn;
   }
 
@@ -397,16 +416,10 @@ var game = function (board) {
   }
 
   function getGameMode() {
-    if (debug) {
-      return this.gameMode;
-    }
     return gameMode;
   }
 
   function setGameMode(mode) {
-    if (debug) {
-      this.gameMode = mode;
-    }
     gameMode = mode;
   }
 
