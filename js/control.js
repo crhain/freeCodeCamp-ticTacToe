@@ -34,7 +34,7 @@ var Control = function Control(game) {
       //console.log(e);
       var selectXbutton = document.getElementById('select-x');
       var selectObutton = document.getElementById('select-o');
-      if (game.getGameOver()) {
+      if (game.getGameOver() || game.getTurn() === 1) {
         if (e.target.id === 'select-x') {
           if (game.getPlayerPiece() !== 'X') {
             game.setPlayerPiece('X');
