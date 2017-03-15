@@ -8,16 +8,21 @@
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-  <h1>Tic Tac Toe</h1>
+  <div id="title">
+    <h1>Tic Tac Toe</h1>
+  </div>
+  
 
   <div id="control-panel">
-    <button id="reset-btn">Reset</button>
-    <button id="select-x" class="select-piece-btn is-active">X</button>
+    <div id="piece-select-container">
+      <button id="select-x" class="select-piece-btn is-active">X</button>
     <button id="select-o" class="select-piece-btn">O</button>    
+    </div>        
     <select name="game-mode" id="game-mode-select">
       <option value='0'>Solo Mode</option>
       <option selected=true value='1'>Normal (AI) Mode</option>
     </select>
+    <button id="reset-btn">Reset</button>
   </div>
   <div id='board'>
     <div class="row">
@@ -37,8 +42,10 @@
     </div>
   </div>
 
-  <div id="message-panel" class="row">
-    <h3>Messages</h3>
+  <div class="row"></div>
+
+  <div id="message-panel" class="is-rolled-up">
+    <h3>Click To Show More</h3>
     <div id="message-display"></div>
   </div>
 

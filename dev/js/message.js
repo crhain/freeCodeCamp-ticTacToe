@@ -4,6 +4,24 @@ class Message{
   constructor(){
     this.display = document.getElementById('message-display');
     this.outputBuffer = [];
+    var messagePanel = document.getElementById('message-panel');
+
+    messagePanel.addEventListener('click', (e) => {
+      let classes = messagePanel.classList;
+      let hasClass = false;      
+      let title = messagePanel.getElementsByTagName('h3')[0];
+      for(let i = 0; i < classes.length; i++){
+        if(classes[i] ==="is-rolled-up"){ hasClass = true; }
+      }
+      if(hasClass){
+        messagePanel.classList.remove('is-rolled-up');
+        title.innerHTML = "Messages:";
+      }
+      else{
+        messagePanel.classList.add('is-rolled-up');
+        title.innerHTML = "Click To Show More";        
+      }
+    });
   }
   //public methods
   send(message){
