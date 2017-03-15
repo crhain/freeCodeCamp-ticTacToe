@@ -202,11 +202,10 @@ var game = (function(board){
     //  score each unit (columns, rows, diagonals) with regards to potential move
     //   +100 = computer: unit that will have three in a row
     //   +10  = computer: unit that will have two in a row with one empty
-    //   +1   = computer: unit that will have one with two empty
-    //   -100 = player:   unit that will have three in a row
-    //   -10  = player:   unit that will have two in a row
-    //   -1   = player:   unit that will have one in a row
-    //    0   = empty unit
+    //   +1   = computer: unit that will have one with two empty    
+    //   -100  = player:   unit has two in a row with one empty
+    //   -10   = player:   unit that will have one in a row
+    //    -1   = empty unit
 
     //use supplied board or create copy of board
     let testBoard;

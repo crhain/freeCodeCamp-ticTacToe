@@ -77,13 +77,14 @@ getMoveScore(move, board) :
 
 1. runs through entire board and scores all rows, columns and two diagonals given the current move.  returned scores for each row, column and diagonal using following:
 
+
 1. 100 :  if move would complete a row (winning)  (unit has two pieces)
 2. 10  :  if move would leave one remaining empty spot (unit has one piece)
 3. 1   :  if move would leave two remaining empty spots (unit is empty)
 4. -100 :  if opposite piece has two with one empty
 5. -10  :  if opposite piece has one with two rows empty
 6. -1   :  if row is empty
-7.  1000 : if any unit is already complete before move. a win has been scored
+7.  -1000 : if any unit is already complete before move. a win has been scored
 
 
 Therefore.
