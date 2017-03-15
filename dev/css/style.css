@@ -64,6 +64,7 @@ body{
 
 #board{
   width: 260px;
+  background-color: white;
   margin: 10px auto;
 }
 
@@ -73,10 +74,10 @@ button{
   color: black;
 }
 
-#board button{
-  display: inline-block;
+#board button{  
   width: 80px;
   height: 80px;
+  float: left;
   outline: none;
   border: none;
   padding: 0;
@@ -84,9 +85,8 @@ button{
   color: black;
   font-size: 2rem;
   margin-bottom: 10px;
-  margin-right: 10px;
-  float: left;
-  box-shadow: 1px 1px 5px 1px black;
+  margin-right: 10px;  
+  box-shadow: 1px 1px 5px 1px black;  
 }
 
 #board button:last-child{
@@ -101,6 +101,22 @@ button{
 #board button:hover{
   box-shadow: 2px 2px 5px 2px black, -1px -1px 5px 1px black;
 }
+
+.game-over{
+  position: absolute;  
+  top: 40px;
+  left: 0px;
+  width: 260px;
+  text-align: center;
+  font-size: 3rem;
+  z-index: -1;  
+}
+
+.show{
+  z-index: 10;
+}
+
+
 
 #message-panel{
   height: 300px;

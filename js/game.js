@@ -122,15 +122,18 @@ var game = function (board) {
       if (playerTurn) {
         console.log('You have WON!!!'); //update to send to message window
         messageWindow.send('You have WON!!!');
+        boardDisplay.showMessage('win');
       } else {
         console.log('You have LOST :(((('); //update to send to message window
         messageWindow.send('You have LOST :((((');
+        boardDisplay.showMessage('loss');
       }
       gameOver = true;
       //resetGame();
     } else if (isTie(move)) {
       console.log('You have tied :|'); //update to send to message window
       messageWindow.send('You have tied :|');
+      boardDisplay.showMessage('tie');
       gameOver = true;
     } else {
       //switch to other oponents move

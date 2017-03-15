@@ -8,12 +8,8 @@ class Message{
 
     messagePanel.addEventListener('click', (e) => {
       let classes = messagePanel.classList;
-      let hasClass = false;      
-      let title = messagePanel.getElementsByTagName('h3')[0];
-      for(let i = 0; i < classes.length; i++){
-        if(classes[i] ==="is-rolled-up"){ hasClass = true; }
-      }
-      if(hasClass){
+      let title = messagePanel.getElementsByTagName('h3')[0];      
+      if(classes.contains('is-rolled-up')){
         messagePanel.classList.remove('is-rolled-up');
         title.innerHTML = "Messages:";
       }

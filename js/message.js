@@ -15,14 +15,8 @@ var Message = function () {
 
     messagePanel.addEventListener('click', function (e) {
       var classes = messagePanel.classList;
-      var hasClass = false;
       var title = messagePanel.getElementsByTagName('h3')[0];
-      for (var i = 0; i < classes.length; i++) {
-        if (classes[i] === "is-rolled-up") {
-          hasClass = true;
-        }
-      }
-      if (hasClass) {
+      if (classes.contains('is-rolled-up')) {
         messagePanel.classList.remove('is-rolled-up');
         title.innerHTML = "Messages:";
       } else {

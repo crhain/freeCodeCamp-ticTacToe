@@ -32,8 +32,14 @@ var Board = function () {
     key: 'reset',
     value: function reset() {
       var buttons = document.querySelectorAll('#board button');
+      var messageWindows = document.getElementsByClassName('game-over');
+      //clear text on buttons
       for (var i = 0; i < buttons.length; i++) {
         buttons[i].innerHTML = '';
+      }
+      //close any open game-over status messageWindows
+      for (var _i = 0; _i < messageWindows.length; _i++) {
+        messageWindows[_i].classList.remove('show');
       }
     }
     //updates the board display - called from game module
@@ -43,7 +49,15 @@ var Board = function () {
     value: function update(move) {
       var squareId = move.id;
       this.setSquare(this.getSquareById(squareId), move.piece);
-      //document.getElementById(squareId).innerHTML = move.piece;
+    }
+  }, {
+    key: 'showMessage',
+    value: function showMessage(message) {
+      var messageId = message.toLowerCase();
+      var messageWindow = document.getElementById(messageId);
+      if (!messageWindow.classList.contains('show')) {
+        messageWindow.classList.add('show');
+      }
     }
   }, {
     key: 'getSquareById',
