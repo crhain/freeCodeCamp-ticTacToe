@@ -5,7 +5,9 @@
   "homepage": "http://crhwebdev.github.io/fcc-tictactoe",
   "main": "index.js",
   "scripts": {
-    "start": "parcel index.html",
+    "combine": "rollup ./src/app/app.js -o ./public/app/app.js -f iife --name \"game\"",
+    "bundle": "rollup -c",
+    "start": "parcel index.html --open",
     "lint": "eslint js",
     "build": "parcel build index.html",
     "test": "mocha"
@@ -24,7 +26,9 @@
     "chai": "^3.5.0",
     "eslint": "^3.16.1",
     "eslint-config-google": "^0.7.1",
+    "gh-pages": "^1.1.0",
     "mocha": "^3.2.0",
-    "parcel-bundler": "^1.7.0"
+    "parcel-bundler": "^1.7.0",
+    "rimraf": "^2.6.2"
   }
 }

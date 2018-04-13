@@ -1,6 +1,6 @@
 /*handles display of board, board input*/
 
-export class Board {
+export default class Board {
   constructor(game){
     this.game = game;
     var buttons = document.querySelectorAll('#board button');
@@ -49,3 +49,4 @@ export class Board {
     square.innerHTML = piece;
   }
 }
+

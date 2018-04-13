@@ -1,7 +1,6 @@
 //Model that holds game state
 
-
-var module = {},
+var model = {},
     board = [ 
       ['', '', ''], 
       ['', '', ''], 
@@ -10,21 +9,20 @@ var module = {},
     boardRows,
     boardColumns,
     boardDiagonals;
-//configuration
-var debug = true;
-//public methods    
-module.getBoard = getBoard;
-module.getRows = getRows;
-module.getColumns = getColumns;
-module.getDiagonals = getDiagonals;
-module.makeCopyOfBoard = makeCopyOfBoard;
-module.clearBoard = clearBoard;
-module.getBoardCell = getBoardCell;
-module.setBoardCell = setBoardCell;    
 
-if(debug){
-  module.board = board;
-}
+//public methods    
+model.getBoard = getBoard;
+model.getRows = getRows;
+model.getColumns = getColumns;
+model.getDiagonals = getDiagonals;
+model.makeCopyOfBoard = makeCopyOfBoard;
+model.clearBoard = clearBoard;
+model.getBoardCell = getBoardCell;
+model.setBoardCell = setBoardCell;    
+
+
+model.board = board;
+
 //method: getBoard()
 function getBoard(){
   return board;
@@ -124,4 +122,4 @@ function setBoardCell(move){
 }
   
 
-export const model = module;
+export default model;

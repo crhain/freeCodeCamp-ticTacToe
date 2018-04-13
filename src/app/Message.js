@@ -1,6 +1,6 @@
 /*A very simple terminal emulator using html*/
 
-export class Message{
+export default class Message{
   constructor(){
     this.display = document.getElementById('message-display');
     this.outputBuffer = [];

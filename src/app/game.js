@@ -5,12 +5,12 @@ import Message from "./Message.js";
 
 /*Handles all game logic and coordination between game interface elements*/
 
-var module = {};
+var game = {};
 //PRIVATE PROPERTIES
 var boardDisplay,
     controlPanel,
     messageWindow;
-var board = board;
+var board = model;
 var playerPiece = 'X';
 var computerPiece = 'O';
 var playerTurn = true;
@@ -20,53 +20,52 @@ var turn = 1;
 //GAME TOGGLES
 
 var gameMode = 1;  //0 = solo play; 1 = ai on
-var debug = true; //enable debug mode for testing
 
 //PUBLIC METHODS
-  //add public methods and properties to module
-module.start = start;
-module.update = update;
-module.reset = reset;
+  //add public methods and properties to game
+game.start = start;
+game.update = update;
+game.reset = reset;
 
 
-if(debug){
-  //add private properties to module (for testing)
-  module.board = board;
-  module.playerPiece = playerPiece;
-  module.playerTurn = playerTurn;
-  module.gameOver = gameOver;
-  module.turn = turn;
-  module.gameMode = gameMode;    
 
-  //add private methods to module (for testing)
-  module.determineGameState = determineGameState;
-  module.makeMove = makeMove;
-  module.aiPlayerMove = aiPlayerMove;
-  module.getMoveScore = getMoveScore;
-  module.getScore = getScore;
+  //add private properties to game (for testing)
+  game.board = board;
+  game.playerPiece = playerPiece;
+  game.playerTurn = playerTurn;
+  game.gameOver = gameOver;
+  game.turn = turn;
+  game.gameMode = gameMode;    
 
-  module.isMoveValid = isMoveValid;
-  module.isWin = isWin;
-  module.isTie = isTie;
+  //add private methods to game (for testing)
+  game.determineGameState = determineGameState;
+  game.makeMove = makeMove;
+  game.aiPlayerMove = aiPlayerMove;
+  game.getMoveScore = getMoveScore;
+  game.getScore = getScore;
 
-  //module.getCurrentMoveOnBoard = getCurrentMoveOnBoard;
-  module.createMoveFromSquare = createMoveFromSquare;
-  module.createMoveFromCoords = createMoveFromCoords;
-}
+  game.isMoveValid = isMoveValid;
+  game.isWin = isWin;
+  game.isTie = isTie;
 
-//add getters and setters to module (public?)  
-module.getPlayerPiece = getPlayerPiece;
-module.setPlayerPiece = setPlayerPiece;        
-module.getCurrentPiece = getCurrentPiece;
-module.toggleCurrentPiece = toggleCurrentPiece;
-module.getTurn = getTurn;
-module.incrementTurn = incrementTurn;
-module.getGameOver = getGameOver;
-module.toggleGameOver = toggleGameOver;
-module.getIsPlayerTurn = getIsPlayerTurn;
-module.togglePlayerTurn = togglePlayerTurn;
-module.getGameMode = getGameMode;
-module.setGameMode = setGameMode;
+  //game.getCurrentMoveOnBoard = getCurrentMoveOnBoard;
+  game.createMoveFromSquare = createMoveFromSquare;
+  game.createMoveFromCoords = createMoveFromCoords;
+
+
+//add getters and setters to game (public?)  
+game.getPlayerPiece = getPlayerPiece;
+game.setPlayerPiece = setPlayerPiece;        
+game.getCurrentPiece = getCurrentPiece;
+game.toggleCurrentPiece = toggleCurrentPiece;
+game.getTurn = getTurn;
+game.incrementTurn = incrementTurn;
+game.getGameOver = getGameOver;
+game.toggleGameOver = toggleGameOver;
+game.getIsPlayerTurn = getIsPlayerTurn;
+game.togglePlayerTurn = togglePlayerTurn;
+game.getGameMode = getGameMode;
+game.setGameMode = setGameMode;
 
 
 //initializes all game objects and starts the ball rolling
@@ -437,9 +436,7 @@ function setGameMode(mode){
   gameMode = mode;
 }
 
-module.start();
-
-export const game = module;
+export default game;
 
 
 
