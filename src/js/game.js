@@ -1,7 +1,7 @@
-import model from "model.js";
-import Board from "Board.js";
-import Control from "Control.js";
-import Message from "Message.js";
+import model from "./model.js";
+import Board from "./Board.js";
+import Control from "./Control.js";
+import Message from "./Message.js";
 
 /*Handles all game logic and coordination between game interface elements*/
 
@@ -437,6 +437,7 @@ function setGameMode(mode){
   gameMode = mode;
 }
 
+module.start();
 
 export const game = module;
 

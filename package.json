@@ -7,12 +7,14 @@
   "scripts": {
     "start": "parcel index.html",
     "lint": "eslint js",
-    "build": "parcel build index.html",    
+    "build": "parcel build index.html",
     "test": "mocha"
   },
   "author": "Carl Hain",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "model.js": "0.0.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
