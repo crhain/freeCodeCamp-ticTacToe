@@ -5,10 +5,9 @@
   "homepage": "http://crhwebdev.github.io/fcc-tictactoe",
   "main": "index.js",
   "scripts": {
-    "start": "env NODE_PATH=node_modules/.bin",
+    "start": "parcel index.html",
     "lint": "eslint js",
-    "build": "babel dev/js -d js && cp -u ./dev/css/style.css ./css/style.css && cp -u ./dev/index.html ./index.html",
-    "serve": "http-server ./ -p8887 -c-1",
+    "build": "parcel build index.html",    
     "test": "mocha"
   },
   "author": "Carl Hain",
@@ -23,6 +22,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.16.1",
     "eslint-config-google": "^0.7.1",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "parcel-bundler": "^1.7.0"
   }
 }
