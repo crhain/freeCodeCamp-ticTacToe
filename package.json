@@ -10,6 +10,9 @@
     "start": "parcel index.html --open",
     "lint": "eslint js",
     "build": "parcel build index.html",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "postdeploy": "rimraf dist",
     "test": "mocha"
   },
   "author": "Carl Hain",
