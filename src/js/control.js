@@ -1,6 +1,6 @@
-'use strict';
 /*Handles input from and display of control panel*/
-class Control{
+
+export class Control{
   constructor(game){
     this.game = game;
     this.resetButton = document.getElementById('reset-btn');

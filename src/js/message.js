@@ -1,6 +1,6 @@
-'use strict';
 /*A very simple terminal emulator using html*/
-class Message{
+
+export class Message{
   constructor(){
     this.display = document.getElementById('message-display');
     this.outputBuffer = [];

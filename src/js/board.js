@@ -1,6 +1,6 @@
-'use strict';
 /*handles display of board, board input*/
-class Board{
+
+export class Board {
   constructor(game){
     this.game = game;
     var buttons = document.querySelectorAll('#board button');
