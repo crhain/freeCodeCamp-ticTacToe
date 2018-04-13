@@ -4,9 +4,7 @@
   "description": "A simple game of tic tac toe",
   "homepage": "http://crhwebdev.github.io/fcc-tictactoe",
   "main": "index.js",
-  "scripts": {
-    "combine": "rollup ./src/app/app.js -o ./public/app/app.js -f iife --name \"game\"",
-    "bundle": "rollup -c",
+  "scripts": {    
     "start": "parcel index.html --open",
     "lint": "eslint js",
     "build": "parcel build index.html --public-url ./",
