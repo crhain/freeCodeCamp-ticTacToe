@@ -15,16 +15,16 @@
   "author": "Carl Hain",
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.2.5"
+    "@babel/polyfill": "^7.2.5",
+    "mocha": "^5.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
-    "babel-preset-es2015": "^6.24.1",
     "@babel/preset-env": "^7.3.1",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^3.5.0",
     "gh-pages": "^1.1.0",
-    "mocha": "^3.2.0",
     "parcel-bundler": "^1.11.0",
     "rimraf": "^2.6.2"
   }
